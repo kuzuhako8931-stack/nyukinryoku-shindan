@@ -191,6 +191,16 @@
   .meter i.on { background: var(--gold); }
   .junbi-read { font-size: 13px; color: var(--sub); }
   .junbi-num { font-size: 13px; font-weight: 900; color: var(--navy); }
+  .gaps-t { font-size: 12px; font-weight: 900; color: var(--navy); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .gap-list { list-style: none; margin-top: 4px; }
+  .gap-list li {
+    font-size: 13.5px; font-weight: 700; color: var(--ink);
+    padding: 7px 0 7px 28px; position: relative;
+  }
+  .gap-list li::before {
+    content: ""; position: absolute; left: 4px; top: 12px;
+    width: 13px; height: 13px; border: 2px solid var(--gold); border-radius: 3px;
+  }
 
   .close-line {
     text-align: center; font-size: 14.5px; font-weight: 900; color: var(--navy);
@@ -295,13 +305,16 @@
         <div class="meter" id="r-meter"></div>
         <div class="junbi-num" id="r-junbi-num"></div>
         <div class="junbi-read" id="r-junbi"></div>
+        <div class="gaps-t" id="r-gaps-t" style="display:none">あなたの回答から見つかった空白</div>
+        <ul class="gap-list" id="r-gaps"></ul>
+        <div class="skip-note" id="r-gaps-note" style="display:none">全部を埋める必要はありません。上の3手が終わったら、ここに戻ってきてください。</div>
       </div>
 
       <div class="close-line">知識は、もう足りています。<br>決まっていなかったのは、順番だけ。</div>
 
       <div class="cta">
         <div class="cta-t">タイプ名をLINEで返信してください</div>
-        <div class="cta-d">「<b id="r-name2"></b>」と送ると、次に届く内容があなたのタイプに合わせて変わります。今週の一手まで、伴走します。</div>
+        <div class="cta-d">「<b id="r-name2"></b>」と送ると、すぐに<b>あなたのタイプの「最初の3手」と今週の一手</b>が届きます。詰まったら、その状況を返信すればかずとしが直接返します。</div>
         <button class="btn btn-copy" onclick="copyType()" id="copybtn">タイプ名をコピーする</button>
         <a class="btn-line" href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">LINEに戻って返信する</a>
         <div class="copy-hint">まだ友だち追加していない方は、上のボタンから登録できます</div>
@@ -342,25 +355,25 @@ const QUESTIONS = [
     note:"ざっくりで大丈夫です。" },
   { id:"q4", label:"Q4 / 10",
     text:"毎月、決まった額を投資に回せていますか？",
-    note:"" },
+    note:"", gap:"毎月の入金額が固定されていない" },
   { id:"q5", label:"Q5 / 10",
     text:"新NISAの口座は開いていますか？",
-    note:"" },
+    note:"", gap:"新NISAの口座がまだ無い" },
   { id:"q6", label:"Q6 / 10",
     text:"平日に30分、家計や投資を見直す時間がありますか？",
-    note:"" },
+    note:"", gap:"平日30分の見直し時間が取れていない" },
   { id:"q7", label:"Q7 / 10",
     text:"毎月の生活費がいくらか、いますぐ即答できますか？",
-    note:"" },
+    note:"", gap:"毎月の生活費を即答できない" },
   { id:"q8", label:"Q8 / 10",
     text:"車・保険・通信のうち、この1年で見直したものがありますか？",
-    note:"" },
+    note:"", gap:"固定費をこの1年、見直していない" },
   { id:"q9", label:"Q9 / 10",
     text:"副業や学習に使える時間が、週2時間ありますか？",
-    note:"" },
+    note:"", gap:"副業・学習に使える週2時間が無い" },
   { id:"q10", label:"Q10 / 10",
     text:"1年後に貯金と投資をいくらにしたいか、数字で言えますか？",
-    note:"" },
+    note:"", gap:"1年後の目標を数字で言えない" },
 ];
 
 const TYPES = {
@@ -480,15 +493,27 @@ function finish(){
   ).join("");
   $("r-note").innerHTML = t.note;
 
-  // 準備度（Q4〜Q10のはいの数）
-  const y = ["q4","q5","q6","q7","q8","q9","q10"].filter(k => a[k]).length;
+  // 準備度（Q4〜Q10のはいの数）＋あなたの空白（いいえの質問を実表示）
+  const gapQs = QUESTIONS.filter(q => q.gap);
+  const gaps = gapQs.filter(q => !a[q.id]).map(q => q.gap);
+  const y = gapQs.length - gaps.length;
   $("r-meter").innerHTML = Array.from({length:7}, (_,i) => `<i class="${i < y ? 'on' : ''}"></i>`).join("");
   $("r-junbi-num").textContent = `${y} / 7`;
   let read;
   if (y <= 2) read = "仕組みがまだ無い段階。最初の3手は「仕組みを1つ作る」ことに絞ってください。";
-  else if (y <= 4) read = "仕組みの穴が2〜3か所。「いいえ」だった質問が、そのまま次の一手です。";
-  else read = "仕組みはあります。足りないのは入金額の固定と、月1回の見直し日だけです。";
+  else if (y <= 4) read = "仕組みの穴が2〜3か所。下の空白が、そのまま次の一手です。";
+  else if (y < 7) read = "仕組みはほぼ完成。残っている空白は下の1〜2個だけです。";
+  else read = "7つ全部そろっています。あとは上の3手で「回している額」を作るだけです。";
   $("r-junbi").textContent = read;
+  if (gaps.length) {
+    $("r-gaps-t").style.display = "block";
+    $("r-gaps-note").style.display = "block";
+    $("r-gaps").innerHTML = gaps.map(g => `<li>${g}</li>`).join("");
+  } else {
+    $("r-gaps-t").style.display = "none";
+    $("r-gaps-note").style.display = "none";
+    $("r-gaps").innerHTML = "";
+  }
 
   show("s-result");
 }
