@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>入金力の現在地診断｜入金力ラボ</title>
+<meta name="description" content="「何をやるか」より「何からやるか」。13回タップで、あなたが止まっている場所と最初の3手が出ます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0e3a57;
+    --navy-deep: #092b42;
+    --gold: #c99a3f;
+    --gold-soft: #f3e8d2;
+    --ink: #182230;
+    --sub: #5a6676;
+    --faint: #98a2b3;
+    --line: #e3e8ef;
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --green: #06c755;
+    --warn-bg: #fdf6ec;
+    --warn-line: #e5c07b;
+    --warn-ink: #8a5a12;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { height: 100%; }
+  body {
+    font-family: "Zen Kaku Gothic New", "Hiragino Sans", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+    font-weight: 500;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.8;
+    display: flex;
+    justify-content: center;
+    min-height: 100%;
+  }
+  .app {
+    width: 100%;
+    max-width: 460px;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    box-shadow: 0 0 60px rgba(14,58,87,.06);
+  }
+
+  header {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color: #fff;
+    padding: 16px 22px 12px;
+  }
+  .head-row { display: flex; justify-content: space-between; align-items: baseline; }
+  .brand { font-weight: 900; letter-spacing: .16em; font-size: 14px; }
+  .brand small { display:block; font-size: 9px; letter-spacing: .3em; color: var(--gold); font-weight: 700; margin-top: 1px; }
+  .pcount { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.65); letter-spacing: .08em; }
+  .pcount b { color: #fff; font-size: 14px; }
+  .progress { height: 4px; background: rgba(255,255,255,.18); border-radius: 2px; overflow: hidden; margin-top: 10px; }
+  .progress > div { height: 100%; width: 0%; background: var(--gold); border-radius: 2px; transition: width .35s cubic-bezier(.4,0,.2,1); }
+
+  main { flex: 1; padding: 26px 22px 44px; }
+
+  .screen { display: none; }
+  .screen.active { display: block; animation: rise .35s cubic-bezier(.2,.7,.3,1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- intro ---------- */
+  .eyebrow {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .18em;
+    color: var(--navy); background: var(--gold-soft); border-radius: 999px;
+    padding: 4px 14px; margin-bottom: 16px;
+  }
+  h1 { font-size: 30px; line-height: 1.42; font-weight: 900; letter-spacing: .02em; }
+  h1 .u { background: linear-gradient(transparent 68%, var(--gold-soft) 68%); }
+  .lead { font-size: 14px; color: var(--sub); margin-top: 14px; }
+  .lead b { color: var(--ink); font-weight: 700; }
+  .kicker { font-size: 13.5px; color: var(--ink); font-weight: 700; margin-top: 14px; }
+
+  .types-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0 6px; }
+  .type-chip {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 9px 12px; font-size: 12.5px; font-weight: 700; color: var(--navy);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .type-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none; }
+  .types-note { font-size: 11.5px; color: var(--faint); margin-bottom: 18px; }
+
+  .trust { display: flex; gap: 14px; margin: 16px 0 22px; }
+  .trust div { font-size: 11px; color: var(--sub); line-height: 1.5; flex: 1; text-align: center; }
+  .trust div b { display: block; font-size: 12.5px; color: var(--navy); font-weight: 900; margin-bottom: 2px; }
+
+  .btn {
+    display: block; width: 100%; border: none; cursor: pointer;
+    border-radius: 14px; font-family: inherit; font-weight: 700;
+    transition: transform .08s ease, box-shadow .2s, border-color .15s, background .15s;
+  }
+  .btn:active { transform: scale(.98); }
+  .btn-primary {
+    background: var(--navy); color: #fff; font-size: 16.5px; padding: 18px; font-weight: 900;
+    letter-spacing: .04em; box-shadow: 0 8px 24px rgba(14,58,87,.25);
+  }
+  .btn-primary span { color: var(--gold); }
+  .intro-foot { font-size: 11px; color: var(--faint); text-align: center; margin-top: 12px; }
+
+  /* ---------- question ---------- */
+  .qhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+  .qbadge {
+    font-size: 11px; font-weight: 900; letter-spacing: .14em; color: var(--gold);
+  }
+  .qtext {
+    font-size: 20px; font-weight: 900; line-height: 1.65; letter-spacing: .01em;
+    min-height: 4.9em; margin-bottom: 4px;
+  }
+  .qnote { font-size: 12px; color: var(--sub); margin-bottom: 24px; min-height: 1.8em; }
+
+  .btn-ans {
+    font-size: 16.5px; padding: 17px; margin-bottom: 12px; font-weight: 900;
+    background: var(--card); color: var(--navy); border: 1.5px solid var(--line);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 2px 8px rgba(14,58,87,.05);
+  }
+  .btn-ans .mk { font-size: 14px; color: var(--gold); font-weight: 900; }
+  .btn-ans:hover { border-color: var(--navy); }
+  .btn-back {
+    background: none; border: none; color: var(--faint); font-size: 12.5px; padding: 12px;
+    width: 100%; margin-top: 4px; cursor: pointer; font-family: inherit; font-weight: 700;
+  }
+  .btn-back:hover { color: var(--sub); }
+
+  /* ---------- result ---------- */
+  .r-eyebrow { font-size: 11px; font-weight: 900; letter-spacing: .24em; color: var(--faint); margin-bottom: 10px; }
+  .r-hero {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color: #fff; border-radius: 18px; padding: 26px 24px 24px; margin-bottom: 12px;
+    position: relative; overflow: hidden;
+  }
+  .r-hero::after {
+    content: ""; position: absolute; top: -30px; right: -30px; width: 130px; height: 130px;
+    border-radius: 50%; background: rgba(201,154,63,.14);
+  }
+  .r-hero .cap { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; color: var(--gold); margin-bottom: 6px; }
+  .r-hero .t-name { font-size: 34px; font-weight: 900; line-height: 1.25; letter-spacing: .02em; }
+  .r-hero .t-sub { font-size: 12.5px; color: rgba(255,255,255,.78); margin-top: 8px; line-height: 1.7; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .card-t { font-size: 12px; font-weight: 900; letter-spacing: .14em; color: var(--gold); margin-bottom: 8px; }
+  .card p { font-size: 13.5px; color: var(--sub); }
+  .card p b { color: var(--ink); }
+
+  .exception {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 16px;
+    padding: 16px 20px; font-size: 13px; color: var(--warn-ink); margin-bottom: 12px; line-height: 1.75;
+  }
+  .exception b { display: block; font-size: 11.5px; letter-spacing: .12em; margin-bottom: 4px; }
+
+  .skip-list { list-style: none; }
+  .skip-list li {
+    font-size: 14px; font-weight: 700; color: var(--ink);
+    padding: 8px 0 8px 30px; position: relative; border-bottom: 1px dashed var(--line);
+  }
+  .skip-list li:last-child { border-bottom: none; }
+  .skip-list li::before {
+    content: "✕"; position: absolute; left: 4px; color: var(--faint); font-weight: 900;
+  }
+  .skip-note { font-size: 12px; color: var(--sub); margin-top: 8px; }
+
+  .steps-wrap { margin: 4px 0 0; }
+  .step {
+    display: flex; gap: 14px; padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .step:last-child { border-bottom: none; }
+  .step .n {
+    flex: none; width: 32px; height: 32px; border-radius: 50%;
+    background: var(--gold-soft); color: var(--navy); font-weight: 900; font-size: 15px;
+    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+  .step .do { font-size: 14.5px; font-weight: 900; line-height: 1.6; }
+  .step .why { font-size: 12px; color: var(--sub); margin-top: 3px; }
+  .steps-foot { font-size: 12px; color: var(--sub); margin-top: 10px; }
+  .steps-foot b { color: var(--ink); }
+
+  .meter { display: flex; gap: 5px; margin: 10px 0 8px; }
+  .meter i { flex: 1; height: 8px; border-radius: 4px; background: var(--line); }
+  .meter i.on { background: var(--gold); }
+  .junbi-read { font-size: 13px; color: var(--sub); }
+  .junbi-num { font-size: 13px; font-weight: 900; color: var(--navy); }
+
+  .close-line {
+    text-align: center; font-size: 14.5px; font-weight: 900; color: var(--navy);
+    margin: 26px 0 14px; line-height: 1.9;
+  }
+  .cta {
+    background: var(--card); border: 1.5px solid var(--green);
+    border-radius: 18px; padding: 22px 20px; text-align: center;
+  }
+  .cta .cta-t { font-size: 15px; font-weight: 900; margin-bottom: 6px; }
+  .cta .cta-d { font-size: 12.5px; color: var(--sub); margin-bottom: 16px; }
+  .cta .cta-d b { color: var(--ink); }
+  .btn-copy {
+    background: var(--bg); color: var(--navy); border: 1px solid var(--line);
+    font-size: 13.5px; padding: 13px; margin-bottom: 10px; font-weight: 700;
+  }
+  .btn-line {
+    background: var(--green); color: #fff; font-size: 16px; padding: 16px;
+    border-radius: 14px; text-decoration: none; display: block; font-weight: 900;
+    box-shadow: 0 8px 20px rgba(6,199,85,.25);
+  }
+  .copy-hint { font-size: 11px; color: var(--faint); margin-top: 10px; line-height: 1.7; }
+  .retry { text-align: center; margin-top: 8px; }
+
+  footer {
+    padding: 20px 22px 32px; font-size: 10.5px; color: var(--faint); text-align: center; line-height: 1.9;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="head-row">
+      <div class="brand">入金力ラボ<small>NYUKINRYOKU LAB</small></div>
+      <div class="pcount" id="pcount"></div>
+    </div>
+    <div class="progress"><div id="bar"></div></div>
+  </header>
+
+  <main>
+    <!-- intro -->
+    <section class="screen active" id="s-intro">
+      <div class="eyebrow">地方会社員のための現在地診断</div>
+      <h1>「何をやるか」より、<br><span class="u">「何からやるか」。</span></h1>
+      <p class="lead">NISAも、固定費の見直しも、やり方はもう知っているはず。それでも資産が増えないのは、意志が弱いからではありません。<b>順番が決まっていないから</b>です。</p>
+      <p class="kicker">13回タップすると、あなたが止まっている場所が出ます。</p>
+      <div class="types-row">
+        <div class="type-chip">時間不足型</div>
+        <div class="type-chip">固定費過多型</div>
+        <div class="type-chip">現金不足型</div>
+        <div class="type-chip">準備完了型</div>
+      </div>
+      <div class="types-note">4タイプのどれかに必ず当てはまります。タイプごとに「最初の3手」と「やらなくていいこと」が変わります。</div>
+      <div class="trust">
+        <div><b>30秒</b>タップだけ</div>
+        <div><b>送信なし</b>回答は端末内だけ</div>
+        <div><b>登録不要</b>結果は即表示</div>
+      </div>
+      <button class="btn btn-primary" onclick="start()">現在地を出す<span>　→</span></button>
+      <div class="intro-foot">迷った質問は「いいえ」でOK。正確さより速さです。</div>
+    </section>
+
+    <!-- question -->
+    <section class="screen" id="s-q">
+      <div class="qhead"><div class="qbadge" id="qnum"></div></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="qnote" id="qnote"></div>
+      <button class="btn btn-ans" onclick="answer(true)"><span class="mk">◯</span>はい</button>
+      <button class="btn btn-ans" onclick="answer(false)"><span class="mk">─</span>いいえ</button>
+      <button class="btn-back" onclick="back()">← 1つ戻る</button>
+    </section>
+
+    <!-- result -->
+    <section class="screen" id="s-result">
+      <div class="r-eyebrow">診断結果</div>
+      <div class="r-hero">
+        <div class="cap">あなたの現在地は</div>
+        <div class="t-name" id="r-name"></div>
+        <div class="t-sub" id="r-sub"></div>
+      </div>
+      <div class="exception" id="r-exception" style="display:none"></div>
+
+      <div class="card">
+        <div class="card-t">なぜ、ここからか</div>
+        <p id="r-why"></p>
+      </div>
+
+      <div class="card">
+        <div class="card-t">いまのあなたが、やらなくていいこと</div>
+        <ul class="skip-list" id="r-skip"></ul>
+        <div class="skip-note">やめるのではなく「後回しでいい」ということ。順番が来たらやります。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">最初の3手（上から順に）</div>
+        <div class="steps-wrap" id="r-steps"></div>
+        <div class="steps-foot" id="r-note"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">仕組みの準備度</div>
+        <div class="meter" id="r-meter"></div>
+        <div class="junbi-num" id="r-junbi-num"></div>
+        <div class="junbi-read" id="r-junbi"></div>
+      </div>
+
+      <div class="close-line">知識は、もう足りています。<br>決まっていなかったのは、順番だけ。</div>
+
+      <div class="cta">
+        <div class="cta-t">タイプ名をLINEで返信してください</div>
+        <div class="cta-d">「<b id="r-name2"></b>」と送ると、次に届く内容があなたのタイプに合わせて変わります。今週の一手まで、伴走します。</div>
+        <button class="btn btn-copy" onclick="copyType()" id="copybtn">タイプ名をコピーする</button>
+        <a class="btn-line" href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">LINEに戻って返信する</a>
+        <div class="copy-hint">まだ友だち追加していない方は、上のボタンから登録できます</div>
+      </div>
+
+      <div class="retry"><button class="btn-back" onclick="location.reload()">もう一度診断する</button></div>
+    </section>
+  </main>
+
+  <footer>
+    この診断は一般的な情報提供であり、特定の金融商品の勧誘・投資助言ではありません。<br>
+    投資・保険等の最終判断はご自身でお願いします。｜入金力ラボ
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+// 質問定義（正本：入金力の現在地診断 v02・2026-08-25本人確定の線引き）
+const QUESTIONS = [
+  { id:"e1", label:"はじめの確認 1 / 3",
+    text:"支払いの延滞、高金利の借入、毎月の赤字。どれか当てはまりますか？",
+    note:"リボ払い・カードローン・キャッシングの残りがある場合も「はい」です。" },
+  { id:"e2", label:"はじめの確認 2 / 3",
+    text:"1年以内に大きな支出（車・出産・引っ越しなど）の予定が決まっていますか？",
+    note:"" },
+  { id:"e3", label:"はじめの確認 3 / 3",
+    text:"残業が月45時間を超えている、体調を崩しかけている、育児や介護で余力ゼロ。どれか当てはまりますか？",
+    note:"" },
+  { id:"q1", label:"Q1 / 10",
+    text:"貯金は、生活費の3か月分以上ありますか？",
+    note:"すぐ引き出せる預金だけで数えます。投資は入れません。" },
+  { id:"q2", label:"Q2 / 10",
+    text:"先週、同じ形式の資料づくり・定型メール・転記・議事録の清書を、自分の手でやりましたか？",
+    note:"「またこれか」と思いながらやった作業のことです。" },
+  { id:"q3", label:"Q3 / 10",
+    text:"固定費（住居・車・保険・通信・サブスク）は、手取りの半分を超えていますか？",
+    note:"ざっくりで大丈夫です。" },
+  { id:"q4", label:"Q4 / 10",
+    text:"毎月、決まった額を投資に回せていますか？",
+    note:"" },
+  { id:"q5", label:"Q5 / 10",
+    text:"新NISAの口座は開いていますか？",
+    note:"" },
+  { id:"q6", label:"Q6 / 10",
+    text:"平日に30分、家計や投資を見直す時間がありますか？",
+    note:"" },
+  { id:"q7", label:"Q7 / 10",
+    text:"毎月の生活費がいくらか、いますぐ即答できますか？",
+    note:"" },
+  { id:"q8", label:"Q8 / 10",
+    text:"車・保険・通信のうち、この1年で見直したものがありますか？",
+    note:"" },
+  { id:"q9", label:"Q9 / 10",
+    text:"副業や学習に使える時間が、週2時間ありますか？",
+    note:"" },
+  { id:"q10", label:"Q10 / 10",
+    text:"1年後に貯金と投資をいくらにしたいか、数字で言えますか？",
+    note:"" },
+];
+
+const TYPES = {
+  jikan: {
+    name: "時間不足型",
+    sub: "「またこれか」の作業に、考える時間を吸われている状態",
+    why: "単刀直入に言うと、順番は<b>「時間 → 固定費 → 現金」</b>。前の一手が、次の一手の燃料になるからです。時間の余白がない人が固定費の見直しを始めても、繁忙期が来た瞬間に止まります。あなたの最初の敵は、知識不足ではなく時間です。",
+    skip: ["投資の勉強を増やすこと", "新しい節約術を試すこと", "副業を探すこと"],
+    steps: [
+      ["先週やった「同じ形式の作業」を3つ書き出す", "資料の整形・定型メール・転記・議事録。減らせる時間は、この中にある"],
+      ["そのうち1つを、AIに渡すか、やめるか、人に頼む", "同じ形式の作業は、あなたがやる必要のない仕事です"],
+      ["空いた時間の使い道を先に決める", "例：固定費の見直し30分を予定に入れる。時間は余らない、先に取る"],
+    ],
+    note: "<b>今週やるのは1つだけ</b>で十分です。3つ全部やろうとした人から止まります。",
+  },
+  kotei: {
+    name: "固定費過多型",
+    sub: "毎月の固定費が、入金力を先に食っている状態",
+    why: "固定費の見直しは<b>1回やれば翌月からずっと効く</b>、いちばん割のいい一手です。ここを飛ばして副業から入ると、月2万稼ぐ苦労より、通信と保険の見直しで浮く額のほうが大きかった、ということが起きます。",
+    skip: ["副業を探すこと", "食費を我慢すること", "銘柄を研究すること"],
+    steps: [
+      ["固定費を「住居・車・保険・通信・サブスク」の5つに分けて月額を書く", "合計では、どれが重いか見えない"],
+      ["1か月に1つだけ見直す。順番は 通信 → サブスク → 保険 → 車 → 住居", "手間が小さく効果が大きい順。一度に全部やると、どれも終わらない"],
+      ["浮いた額を、その月から先取り貯金か積立に回す", "浮いた額は使うと消える。回すと毎月の入金力になる"],
+    ],
+    note: "「手取りの半分」は仮の線です。比率管理は補助輪。<b>「欲しいものは買う・要らないものは買わない」</b>が身についたら卒業して構いません。",
+  },
+  genkin: {
+    name: "現金不足型",
+    sub: "攻める前に、守る金の底ができていない状態",
+    why: "先に言っておくと、<b>積立を止める必要はありません</b>。月1,000円からの少額なら、底を作りながら並行して大丈夫。この診断で止めるのは「増額」だけです。現金の底がないまま入金額を増やすと、急な出費が来た日に、積立ごと崩れます。",
+    skip: ["積立を全部やめること", "入金額を増やすこと", "銘柄を選び直すこと"],
+    steps: [
+      ["生活費を「1か月の実額」で確定する", "目標額（生活費×3）が決まらないと、いつ終わるか分からない"],
+      ["給料日に、決めた額を別口座へ自動で移す", "「余ったら貯める」は貯まらない。先取りだけが機能する"],
+      ["固定費を1つだけ見直して、浮いた額を先取りに足す", "現金の底ができる日を前倒しする"],
+    ],
+    note: "<b>ゴールは生活費3か月分。</b>そこに届いた日から、増やす段階に入ります。",
+  },
+  junbi: {
+    name: "準備完了型",
+    sub: "時間・固定費・現金。土台は、もうできている状態",
+    why: "止まっている場所はありません。ここから差がつくのは<b>「回せる額」ではなく「回している額」</b>。仕組みで自動的に回る状態を作った人だけが、相場を見ずに積み上がっていきます。",
+    skip: ["知識をさらに増やすこと", "完璧な計画を作り込むこと", "現金をこれ以上積み増すこと"],
+    steps: [
+      ["1年後の「貯金」と「投資」の数字を、別々に決める", "数字で言えないなら、ここが最後の空白"],
+      ["毎月の入金額を固定し、給料日に自動で動く設定にする", "意志ではなく仕組みに回させる"],
+      ["月1回の見直し日をカレンダーに入れる（15分でいい）", "仕組みは作った日から崩れ始める"],
+    ],
+    note: "銘柄や商品の選び方は、この診断では扱いません。<b>順番が先、選び方は後。</b>",
+  },
+};
+
+let idx = 0;
+const answers = {};
+
+function $(id){ return document.getElementById(id); }
+function show(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo(0, 0);
+}
+function setBar(){
+  $("bar").style.width = Math.round(idx / QUESTIONS.length * 100) + "%";
+  $("pcount").innerHTML = idx > 0 && idx <= QUESTIONS.length ? `<b>${idx}</b> / ${QUESTIONS.length}` : "";
+}
+function start(){ idx = 0; render(); show("s-q"); }
+function render(){
+  const q = QUESTIONS[idx];
+  $("qnum").textContent = q.label;
+  $("qtext").textContent = q.text;
+  $("qnote").textContent = q.note;
+  setBar();
+}
+function answer(v){
+  answers[QUESTIONS[idx].id] = v;
+  idx++;
+  if (idx >= QUESTIONS.length) { finish(); } else { render(); }
+}
+function back(){
+  if (idx === 0) { show("s-intro"); return; }
+  idx--;
+  render();
+}
+
+function finish(){
+  $("bar").style.width = "100%";
+  $("pcount").innerHTML = "";
+  const a = answers;
+  // 基本判定（順番＝時間 → 固定費 → 現金 → 準備完了）
+  let key = a.q2 ? "jikan" : a.q3 ? "kotei" : !a.q1 ? "genkin" : "junbi";
+  let exception = "";
+  // 例外（優先度：延滞・赤字 ＞ 大きな支出 ＞ 残業45時間超）
+  if (a.e1) {
+    key = "genkin";
+    exception = "支払いの延滞・高金利の借入・毎月の赤字がある場合は、順番に関係なく現金と家計の立て直しが最優先です。増やす話は、ここが片付いてから。";
+  } else if (a.e2 && key !== "genkin") {
+    key = "genkin";
+    exception = "1年以内に大きな支出が決まっている人は、現金の確保が先です。使う予定のあるお金は、増やすお金に回しません。";
+  } else if (a.e3 && key !== "jikan" && !a.e1) {
+    key = "jikan";
+    exception = "残業月45時間超・体調・育児介護のどれかに当てはまる人は、文句なしで時間からです。";
+  }
+
+  const t = TYPES[key];
+  $("r-name").textContent = t.name;
+  $("r-name2").textContent = t.name;
+  $("r-sub").textContent = t.sub;
+  $("r-why").innerHTML = t.why;
+  if (exception) { $("r-exception").innerHTML = "<b>例外ルール適用</b>" + exception; $("r-exception").style.display = "block"; }
+  else { $("r-exception").style.display = "none"; }
+
+  $("r-skip").innerHTML = t.skip.map(s => `<li>${s}</li>`).join("");
+
+  $("r-steps").innerHTML = t.steps.map((s, i) =>
+    `<div class="step"><div class="n">${i+1}</div><div><div class="do">${s[0]}</div><div class="why">${s[1]}</div></div></div>`
+  ).join("");
+  $("r-note").innerHTML = t.note;
+
+  // 準備度（Q4〜Q10のはいの数）
+  const y = ["q4","q5","q6","q7","q8","q9","q10"].filter(k => a[k]).length;
+  $("r-meter").innerHTML = Array.from({length:7}, (_,i) => `<i class="${i < y ? 'on' : ''}"></i>`).join("");
+  $("r-junbi-num").textContent = `${y} / 7`;
+  let read;
+  if (y <= 2) read = "仕組みがまだ無い段階。最初の3手は「仕組みを1つ作る」ことに絞ってください。";
+  else if (y <= 4) read = "仕組みの穴が2〜3か所。「いいえ」だった質問が、そのまま次の一手です。";
+  else read = "仕組みはあります。足りないのは入金額の固定と、月1回の見直し日だけです。";
+  $("r-junbi").textContent = read;
+
+  show("s-result");
+}
+
+function copyType(){
+  const name = $("r-name").textContent;
+  const done = () => { $("copybtn").textContent = "コピーしました ✓"; setTimeout(()=>{ $("copybtn").textContent = "タイプ名をコピーする"; }, 2000); };
+  try {
+    navigator.clipboard.writeText(name).then(done, () => fallbackCopy(name, done));
+  } catch(e) { fallbackCopy(name, done); }
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement("textarea");
+  ta.value = text; document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); done(); } catch(e) {}
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
