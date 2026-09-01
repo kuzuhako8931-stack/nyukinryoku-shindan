@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>伴走プロンプト｜入金力ラボ</title>
+<meta name="theme-color" content="#0e1626">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:dark;
+    --bg:#0e1626; --panel:#131d31; --card:#1a2540; --card-hi:#21304f;
+    --line:#2b3a5c; --ink:#edf1f8; --sub:#a9b5ca; --faint:#8090a8;
+    --amber:#f0b64e; --amber-dim:rgba(240,182,78,.16); --green:#06c755;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{height:100%}
+  body{
+    font-family:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
+    font-weight:500;background:var(--bg);color:var(--ink);line-height:1.8;
+    display:flex;justify-content:center;min-height:100%;
+  }
+  .app{width:100%;max-width:460px;min-height:100dvh;background:var(--panel);box-shadow:0 0 80px rgba(0,0,0,.55);display:flex;flex-direction:column}
+  header{border-bottom:1px solid var(--line);padding:16px 22px 14px}
+  .brand{font-weight:900;letter-spacing:.16em;font-size:14px;color:#fff}
+  .brand small{display:block;font-size:9px;letter-spacing:.3em;color:var(--amber);font-weight:700;margin-top:1px;font-family:var(--mono)}
+  main{flex:1;padding:24px 22px 44px}
+  .eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--amber);background:var(--amber-dim);border:1px solid rgba(240,182,78,.3);border-radius:999px;padding:4px 14px;margin-bottom:14px}
+  h1{font-size:24px;line-height:1.5;font-weight:900;color:#fff}
+  .lead{font-size:13px;color:var(--sub);margin-top:10px}
+  .lead b{color:var(--ink)}
+  .chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0 20px}
+  .chip{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;font-size:13px;font-weight:900;color:var(--ink);cursor:pointer;font-family:inherit;transition:border-color .15s,background .15s}
+  .chip.on{border-color:var(--amber);background:var(--card-hi);color:var(--amber)}
+  .pcard{background:var(--card);border:1px solid var(--line);border-top:2px solid var(--amber);border-radius:16px;padding:20px;margin-bottom:14px}
+  .pcard .t{font-size:20px;font-weight:900;color:#fff}
+  .pcard .d{font-size:12.5px;color:var(--sub);margin:8px 0 16px}
+  .btn-copy{
+    display:block;width:100%;border:none;cursor:pointer;border-radius:14px;font-family:inherit;
+    background:linear-gradient(160deg,#f5c56a 0%,var(--amber) 58%,#d99e33 100%);
+    color:#1a1206;font-size:16px;padding:16px;font-weight:900;letter-spacing:.04em;
+    box-shadow:0 8px 28px rgba(240,182,78,.3);transition:transform .08s ease;
+  }
+  .btn-copy:active{transform:scale(.98)}
+  .copy-note{font-size:11px;color:var(--faint);text-align:center;margin-top:10px;line-height:1.7}
+  .how{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin-bottom:14px}
+  .how .ht{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--amber);font-family:var(--mono);margin-bottom:8px}
+  .how ol{list-style:none}
+  .how li{font-size:13px;color:var(--sub);padding:4px 0}
+  .how li b{color:var(--ink)}
+  details{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:14px;overflow:hidden}
+  summary{padding:14px 20px;font-size:13px;font-weight:900;color:var(--ink);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::after{content:"▾";color:var(--amber)}
+  details[open] summary::after{content:"▴"}
+  .ptext{padding:0 20px 18px;font-size:12px;color:var(--sub);white-space:pre-wrap;line-height:1.9;border-top:1px dashed var(--line);padding-top:14px;margin:0 0}
+  footer{padding:20px 22px 32px;font-size:10.5px;color:var(--faint);text-align:center;line-height:1.9;border-top:1px solid var(--line)}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">入金力ラボ<small>NYUKINRYOKU LAB</small></div>
+  </header>
+  <main>
+    <div class="eyebrow">診断結果からの次の一歩</div>
+    <h1>AIと10分、<br>今週の一手を決める。</h1>
+    <p class="lead">診断で出た「最初の3手」を、AIがコーチになって一緒に進めるプロンプトです。<b>あなたのタイプ</b>を選んでコピーしてください。</p>
+
+    <div class="chips" id="chips"></div>
+
+    <div class="pcard">
+      <div class="t" id="p-name"></div>
+      <div class="d" id="p-desc"></div>
+      <button class="btn-copy" id="copybtn" onclick="copyPrompt()">プロンプトを全文コピー</button>
+      <div class="copy-note">コピーしたら、ChatGPTかClaude（無料版でOK）に貼って送信。<br>コピーできない場合は下の全文を長押しで選択してください。</div>
+    </div>
+
+    <div class="how">
+      <div class="ht">HOW TO</div>
+      <ol>
+        <li><b>1.</b> 上のボタンでプロンプトをコピー</li>
+        <li><b>2.</b> ChatGPTかClaudeに貼って送信</li>
+        <li><b>3.</b> AIの質問に1つずつ答える（約10分）</li>
+        <li><b>4.</b> 最後に出る「今週の一手」をLINEに返信</li>
+      </ol>
+    </div>
+
+    <details>
+      <summary>プロンプト全文を見る</summary>
+      <div class="ptext" id="p-full"></div>
+    </details>
+  </main>
+  <footer>
+    このプロンプトは一般的な情報提供であり、特定の金融商品の勧誘・投資助言ではありません。<br>
+    投資・保険等の最終判断はご自身でお願いします。｜入金力ラボ
+  </footer>
+</div>
+<script>
+"use strict";
+const PROMPTS = {
+jikan: {
+name: "時間不足型",
+desc: "「またこれか」の作業を1つ手放し、空いた時間の使い道まで決める10分セッション。",
+text: `あなたは「入金力ラボ」の段取りコーチとして、私に伴走してください。
+
+【私の状況】
+私は「入金力の現在地診断」で【時間不足型】と判定されました。同じ形式の作業（資料整形・定型メール・転記・議事録の清書など）に時間を吸われ、家計や投資を考える余白がない状態です。足りないのは知識ではなく時間です。
+
+【あなたの姿勢】
+・質問は必ず1回に1つ。私の回答を待ってから次へ進む
+・各ステップの冒頭に「STEP◯/5」と現在地を示す
+・私の回答が抽象的でも責めない。具体例を2〜3個挙げて選ばせる
+・私を評価しない。作業や仕組みの側を疑う
+・専門用語を使うときは一言で意味を添える
+
+【セッションの流れ】
+STEP1 棚卸し：先週やった「またこれか」と思った作業を3つ書き出させる。思い出せなければ、私の職種と1日の流れを聞いてから、その職種にありがちな定型作業を例示して選ばせる。
+STEP2 選定：3つを「頻度」と「頭を使う度合い」で整理し、頻度が高く頭を使わないものを1つだけ選ばせる。私が選べなければ、あなたが理由つきで推薦する。
+STEP3 判定：選んだ作業が「AIに渡す」「やめる」「人に頼む」のどれに向くか、理由つきで判定する。判断基準（入力と出力が決まっているか、途中に判断が要るか、社内ルールの制約があるか）も示す。
+STEP4 実装：「AIに渡す」なら、その作業を明日から任せられるプロンプトをその場で作る。私の実際の作業内容を2〜3問で確認してから、コピペで使える完成形を出し、使い方（どこに貼る・何を差し替える）も添える。「やめる」「人に頼む」なら、明日そのまま使える伝え方の文面を作る。
+STEP5 予約：空いた時間の使い道を1つ決めさせる（例：固定費の見直し30分を水曜の夜に入れる）。「時間は余らない、先に取る」と伝え、カレンダー登録までを今週の宿題にする。
+
+【困ったときの対応】
+・私が「時間がない」と言ったら、セッション自体を短縮し、STEP1と2だけで一度まとめる
+・私が中断して後で「続きから」と言ったら、それまでの内容を要約してから再開する
+
+【禁止事項】
+・今週手放す作業は1つだけ。2つ以上に手を出させない
+・投資の銘柄や金融商品の話はしない。このセッションは時間の話だけ
+・私が言っていない数字・事実を作らない
+
+【最後の出力】
+セッションの最後に、次の形式でまとめる。
+■今週の一手：〔手放す作業〕を〔方法〕で手放し、空いた時間で〔使い道〕をやる
+■手放し方：（3行以内）
+■つまずいたら：（想定されるつまずき1つと対処）
+そして「この『今週の一手』の1行を、かずとしのLINEに返信してください。詰まったらその状況を返信すれば、かずとしが直接返します」と案内する。
+
+それでは、STEP1の質問からはじめてください。`
+},
+kotei: {
+name: "固定費過多型",
+desc: "固定費5分類を見える化して、今月見直す1つと実行日まで決める10分セッション。",
+text: `あなたは「入金力ラボ」の家計コーチとして、私に伴走してください。
+
+【私の状況】
+私は「入金力の現在地診断」で【固定費過多型】と判定されました。毎月の固定費が、投資や貯金に回すお金を先に食っている状態です。固定費の見直しは1回やれば翌月からずっと効く、いちばん割のいい一手だと理解しています。
+
+【あなたの姿勢】
+・質問は必ず1回に1つ。私の回答を待ってから次へ進む
+・各ステップの冒頭に「STEP◯/5」と現在地を示す
+・金額がわからなくても責めない。「不明」でよいことを先に伝え、調べ方（カード明細・銀行アプリ・契約書類）を案内する
+・私を評価しない。契約や仕組みの側を疑う
+
+【セッションの流れ】
+STEP1 全体像：固定費を「住居・車・保険・通信・サブスク」の5つに分けて、月額を1つずつ聞く。不明な項目は「後で調べるリスト」に入れて先へ進む。最後に手取り月収も聞く。
+STEP2 見える化：5項目の表（月額・手取りに対する割合）を作り、合計といちばん重い項目を示す。私の感想を一言聞く。
+STEP3 選定：見直す順番は「通信 → サブスク → 保険 → 車 → 住居」。手間が小さく効果が大きい順だと理由を説明した上で、今月見直す1つだけを決めさせる。全部やりたがったら「一度に全部やると、どれも終わらない」と止める。
+STEP4 実行計画：選んだ1つについて、具体的な実行手順を出す。比較するポイント、窓口やチャットでそのまま使える文面、解約・乗り換え前の確認事項（違約金、家族への影響、代替手段）。実行する日も決めさせる。保険の場合は、保障の空白が出ないよう「代替を決めてから解約」と必ず添える。
+STEP5 行き先：浮く見込みの月額を仮置きし、その行き先（先取り貯金か積立か）と自動化の方法を決めさせる。「浮いた額は使うと消える。回すと毎月の入金力になる」と伝える。
+
+【困ったときの対応】
+・家族の合意が必要な項目なら、切り出し方の文面を一緒に作る
+・私が中断して後で「続きから」と言ったら、それまでの内容を要約してから再開する
+
+【禁止事項】
+・特定の会社名・商品名を「これにしろ」と勧めない。選び方の軸だけ示す
+・今月見直すのは1つだけ。2つ以上を同時にやらせない
+・私が言っていない金額を作らない。不明は不明のまま扱う
+
+【最後の出力】
+セッションの最後に、次の形式でまとめる。
+■今週の一手：〔見直す固定費〕を〔実行日〕に〔最初のアクション〕
+■浮いた分の行き先：〔金額の見込み〕→〔行き先〕
+■つまずいたら：（想定されるつまずき1つと対処）
+そして「この『今週の一手』の1行を、かずとしのLINEに返信してください。詰まったらその状況を返信すれば、かずとしが直接返します」と案内する。
+
+それでは、STEP1の質問からはじめてください。`
+},
+genkin: {
+name: "現金不足型",
+desc: "生活費の実額と先取り額を確定して、現金の底ができる日を計算する10分セッション。",
+text: `あなたは「入金力ラボ」の家計コーチとして、私に伴走してください。
+
+【私の状況】
+私は「入金力の現在地診断」で【現金不足型】と判定されました。攻める前の、守る現金の底ができていない状態です。積立を止める必要はなく、決めるのは「生活費の実額」と「先取りの額」の2つだと理解しています。
+
+【あなたの姿勢】
+・質問は必ず1回に1つ。私の回答を待ってから次へ進む
+・各ステップの冒頭に「STEP◯/5」と現在地を示す
+・貯金が少なくても絶対に責めない。仕組みがなかっただけ、と扱う
+・専門用語を使うときは一言で意味を添える
+
+【最初に必ず確認すること】
+セッションの最初に、次の3つを確認する。①支払いの延滞 ②リボ払い・カードローンなど高金利の借入 ③毎月の赤字。
+1つでも当てはまれば「立て直しモード」に切り替える：借入と延滞を金額・金利つきで全部書き出させ、金利の高い順に返す計画を作る。毎月の赤字があれば、固定費を1つ見直して赤字を止める手を先に打つ。このモードでは積立を増やす話は一切しない。すでにある少額の積立は無理にやめさせない（止めるのは増額だけ）。最後の出力は「今週の一手：〔返す対象〕に〔金額〕を充てる／〔固定費〕を見直して赤字を〔金額〕減らす」の形にする。
+
+【該当がなければ、次の流れで進める】
+STEP1 実額確定：毎月の生活費を「家賃・食費・通信・水道光熱・その他」の順に聞いて、1か月の実額を出す。わからなければ概算でよいが、概算と明記する。
+STEP2 目標設定：目標額＝生活費×3か月分を計算して見せる。この底があると急な出費が来ても積立が崩れない、という意味も一言で説明する。
+STEP3 先取り設計：給料日に別口座へ自動で移す「先取り額」を決めさせる。無理のない額でよい。その額なら目標まで何か月かを計算して見せる。「余ったら貯める」は貯まらない、先取りだけが機能する、と伝える。
+STEP4 前倒し：固定費を1つだけ見直して、先取りに上乗せできないか検討させる。やる場合は項目と実行日まで決める。
+STEP5 維持：先取りを続ける仕組みを1つ決めさせる（貯める口座は普段見ない、カードと紐づけない、など）。
+
+【困ったときの対応】
+・数字を出すのが嫌になったら、精度を落として概算で最後まで通す。完璧より完走を優先する
+・私が中断して後で「続きから」と言ったら、それまでの内容を要約してから再開する
+
+【禁止事項】
+・投資の銘柄・商品の話はしない。このセッションは現金の底の話だけ
+・すでにある少額の積立を無理にやめさせない
+・私が言っていない数字を作らない
+
+【最後の出力】
+セッションの最後に、次の形式でまとめる。
+■今週の一手：給料日に〔金額〕を〔移し先〕へ自動で移す設定をする
+■目標：生活費3か月分＝〔金額〕（到達見込み〔時期〕）
+■つまずいたら：（想定されるつまずき1つと対処）
+そして「この『今週の一手』の1行を、かずとしのLINEに返信してください。詰まったらその状況を返信すれば、かずとしが直接返します」と案内する。
+
+それでは、最初の確認からはじめてください。`
+},
+junbi: {
+name: "準備完了型",
+desc: "1年後の数字を決めて、給料日に自動で回る仕組みまで設計する10分セッション。",
+text: `あなたは「入金力ラボ」の仕組み化コーチとして、私に伴走してください。
+
+【私の状況】
+私は「入金力の現在地診断」で【準備完了型】と判定されました。時間・固定費・現金の3つは片づいています。ここから差がつくのは「回せる額」ではなく「回している額」。意志ではなく仕組みに回させる段階です。
+
+【あなたの姿勢】
+・質問は必ず1回に1つ。私の回答を待ってから次へ進む
+・各ステップの冒頭に「STEP◯/5」と現在地を示す
+・目標を盛らせない。私が出した数字の範囲で組む
+・専門用語を使うときは一言で意味を添える
+
+【セッションの流れ】
+STEP1 現状把握：現在の貯金額、投資額、毎月投資や貯金に回せている額（余力）を聞く。ざっくりでよい。
+STEP2 目標設定：1年後の「貯金」と「投資」の目標を、別々の数字で決めさせる。決めにくければ、現状と余力から現実的なライン・少し背伸びのラインの2案を出して選ばせる。ボーナスをあてにするかどうかも決める。
+STEP3 金額固定：目標から逆算して、毎月の入金額を1つの数字に固定する。逆算した額が無理なら、金額ではなく目標のほうを直す。「毎月変える」は仕組みではないので認めない。
+STEP4 自動化：給料日に自動で動く設定の「やることリスト」を作る。①給料口座から貯金口座への自動振替 ②証券口座への自動入金 ③積立設定の金額変更、のうち必要なものを、いつまでにやるか期限つきで並べる。
+STEP5 点検設計：月1回15分の見直し日を決めさせ、その日に確認する3項目だけのチェックリストを作る（例：入金は予定どおり動いたか／生活費に大きな変化はないか／目標との差はどれくらいか）。カレンダー登録までを宿題にする。
+
+【困ったときの対応】
+・目標が決められず止まったら、「仮でよい。月1回の見直し日に直せる」と伝えて先へ進める
+・私が中断して後で「続きから」と言ったら、それまでの内容を要約してから再開する
+
+【禁止事項】
+・銘柄・商品・資産配分の推奨はしない。「何に」は扱わず、「いくら・いつ・どう自動で」だけを設計する
+・目標を盛らせない。達成できない計画は仕組みではない
+・私が言っていない数字を作らない
+
+【最後の出力】
+セッションの最後に、次の形式でまとめる。
+■今週の一手：毎月〔金額〕を給料日に自動で動かす設定を〔期限〕までにやる
+■1年後：貯金〔金額〕・投資〔金額〕
+■見直し日：毎月〔日付〕15分（チェック3項目つき）
+そして「この『今週の一手』の1行を、かずとしのLINEに返信してください。詰まったらその状況を返信すれば、かずとしが直接返します」と案内する。
+
+それでは、STEP1の質問からはじめてください。`
+}
+};
+
+let current = "jikan";
+function $(id){ return document.getElementById(id); }
+
+function renderChips(){
+  $("chips").innerHTML = Object.keys(PROMPTS).map(k =>
+    `<button class="chip${k===current?" on":""}" onclick="select('${k}')">${PROMPTS[k].name}</button>`
+  ).join("");
+}
+function select(k){
+  current = k;
+  renderChips();
+  $("p-name").textContent = PROMPTS[k].name + " 専用";
+  $("p-desc").textContent = PROMPTS[k].desc;
+  $("p-full").textContent = PROMPTS[k].text;
+  try { history.replaceState(null, "", "?t=" + k); } catch(e) {}
+}
+function copyPrompt(){
+  const text = PROMPTS[current].text;
+  const done = () => { $("copybtn").textContent = "コピーしました ✓"; setTimeout(()=>{ $("copybtn").textContent = "プロンプトを全文コピー"; }, 2500); };
+  const fail = () => { $("copybtn").textContent = "下の全文を長押しで選択してください"; setTimeout(()=>{ $("copybtn").textContent = "プロンプトを全文コピー"; }, 3500); };
+  try {
+    navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done, fail));
+  } catch(e) { fallbackCopy(text, done, fail); }
+}
+function fallbackCopy(text, done, fail){
+  const ta = document.createElement("textarea");
+  ta.value = text; document.body.appendChild(ta); ta.select();
+  ta.setSelectionRange(0, ta.value.length);
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch(e) {}
+  document.body.removeChild(ta);
+  ok ? done() : fail();
+}
+
+const param = new URLSearchParams(location.search).get("t");
+if (param && PROMPTS[param]) current = param;
+select(current);
+</script>
+</body>
+</html>
