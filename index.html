@@ -6,6 +6,12 @@
 <meta name="robots" content="noindex">
 <title>入金力の現在地診断｜入金力ラボ</title>
 <meta name="description" content="「何をやるか」より「何からやるか」。13回タップで、あなたが止まっている場所と最初の3手が出ます。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kuzuhako8931-stack.github.io/nyukinryoku-shindan/">
+<meta property="og:title" content="入金力の現在地診断｜入金力ラボ">
+<meta property="og:description" content="「何をやるか」より「何からやるか」。13回タップで、あなたが止まっている場所と最初の3手が出ます。">
+<meta property="og:site_name" content="入金力ラボ">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
@@ -14,10 +20,11 @@
     --navy: #0e3a57;
     --navy-deep: #092b42;
     --gold: #c99a3f;
+    --gold-deep: #8a6420;
     --gold-soft: #f3e8d2;
     --ink: #182230;
     --sub: #5a6676;
-    --faint: #98a2b3;
+    --faint: #6b7280;
     --line: #e3e8ef;
     --bg: #f4f6f9;
     --card: #ffffff;
@@ -108,7 +115,7 @@
   /* ---------- question ---------- */
   .qhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
   .qbadge {
-    font-size: 11px; font-weight: 900; letter-spacing: .14em; color: var(--gold);
+    font-size: 11px; font-weight: 900; letter-spacing: .14em; color: var(--gold-deep);
   }
   .qtext {
     font-size: 20px; font-weight: 900; line-height: 1.65; letter-spacing: .01em;
@@ -149,7 +156,7 @@
     background: var(--card); border: 1px solid var(--line); border-radius: 16px;
     padding: 18px 20px; margin-bottom: 12px;
   }
-  .card-t { font-size: 12px; font-weight: 900; letter-spacing: .14em; color: var(--gold); margin-bottom: 8px; }
+  .card-t { font-size: 12px; font-weight: 900; letter-spacing: .14em; color: var(--navy); margin-bottom: 8px; }
   .card p { font-size: 13.5px; color: var(--sub); }
   .card p b { color: var(--ink); }
 
@@ -228,6 +235,10 @@
   footer {
     padding: 20px 22px 32px; font-size: 10.5px; color: var(--faint); text-align: center; line-height: 1.9;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -237,7 +248,7 @@
       <div class="brand">入金力ラボ<small>NYUKINRYOKU LAB</small></div>
       <div class="pcount" id="pcount"></div>
     </div>
-    <div class="progress"><div id="bar"></div></div>
+    <div class="progress" id="progress" role="progressbar" aria-label="診断の進み具合" aria-valuemin="0" aria-valuemax="13" aria-valuenow="0"><div id="bar"></div></div>
   </header>
 
   <main>
@@ -265,9 +276,11 @@
 
     <!-- question -->
     <section class="screen" id="s-q">
-      <div class="qhead"><div class="qbadge" id="qnum"></div></div>
-      <div class="qtext" id="qtext"></div>
-      <div class="qnote" id="qnote"></div>
+      <div aria-live="polite">
+        <div class="qhead"><div class="qbadge" id="qnum"></div></div>
+        <div class="qtext" id="qtext"></div>
+        <div class="qnote" id="qnote"></div>
+      </div>
       <button class="btn btn-ans" onclick="answer(true)"><span class="mk">◯</span>はい</button>
       <button class="btn btn-ans" onclick="answer(false)"><span class="mk">─</span>いいえ</button>
       <button class="btn-back" onclick="back()">← 1つ戻る</button>
@@ -427,6 +440,20 @@ const TYPES = {
   },
 };
 
+// e1（延滞・高金利借入・毎月の赤字）該当者は「増やす」前に家計の立て直し。
+// 現金不足型の名前のまま、本文・3手を返済優先の内容へ差し替える
+const E1_OVERRIDE = {
+  sub: "増やす前に、家計の出血を止める段階",
+  why: "先に言っておくと、いまは<b>増やす段階ではありません</b>。リボ払いやカードローンの金利（年15%前後）に勝てる投資は、現実にはありません。積立の増額も新しい投資も、いったん全部後回し。<b>まず出血を止める。</b>それが、いちばん確実にお金が増える一手です。",
+  skip: ["積立を増やすこと", "新しい投資を始めること", "銘柄を研究すること"],
+  steps: [
+    ["延滞・借入・赤字を、金額と金利つきで全部書き出す", "見えない借金は返せない。まず正体を紙に出す"],
+    ["金利の高い借入（リボ・カードローン）から返す", "返済は年15%で確実に効くリターン。積立の増額より先"],
+    ["毎月の赤字なら、固定費を1つ見直して赤字を止める", "赤字のままでは、返しても穴から漏れる"],
+  ],
+  note: "<b>すでにある少額の積立を、無理に解約する必要はありません。</b>止めるのは「増やすこと」だけ。返済と赤字の解消が終わった日から、増やす段階に入ります。",
+};
+
 let idx = 0;
 const answers = {};
 
@@ -438,6 +465,7 @@ function show(id){
 }
 function setBar(){
   $("bar").style.width = Math.round(idx / QUESTIONS.length * 100) + "%";
+  $("progress").setAttribute("aria-valuenow", idx);
   $("pcount").innerHTML = idx > 0 && idx <= QUESTIONS.length ? `<b>${idx}</b> / ${QUESTIONS.length}` : "";
 }
 function start(){ idx = 0; render(); show("s-q"); }
@@ -449,6 +477,7 @@ function render(){
   setBar();
 }
 function answer(v){
+  if (idx >= QUESTIONS.length) return;
   answers[QUESTIONS[idx].id] = v;
   idx++;
   if (idx >= QUESTIONS.length) { finish(); } else { render(); }
@@ -469,16 +498,16 @@ function finish(){
   // 例外（優先度：延滞・赤字 ＞ 大きな支出 ＞ 残業45時間超）
   if (a.e1) {
     key = "genkin";
-    exception = "支払いの延滞・高金利の借入・毎月の赤字がある場合は、順番に関係なく現金と家計の立て直しが最優先です。増やす話は、ここが片付いてから。";
-  } else if (a.e2 && key !== "genkin") {
+    exception = "支払いの延滞・高金利の借入・毎月の赤字がある場合は、順番に関係なく家計の立て直しが最優先です。増やす話は、ここが片付いてから。";
+  } else if (a.e2) {
     key = "genkin";
     exception = "1年以内に大きな支出が決まっている人は、現金の確保が先です。使う予定のあるお金は、増やすお金に回しません。";
-  } else if (a.e3 && key !== "jikan" && !a.e1) {
+  } else if (a.e3 && key !== "jikan") {
     key = "jikan";
     exception = "残業月45時間超・体調・育児介護のどれかに当てはまる人は、文句なしで時間からです。";
   }
 
-  const t = TYPES[key];
+  const t = a.e1 ? Object.assign({}, TYPES.genkin, E1_OVERRIDE) : TYPES[key];
   $("r-name").textContent = t.name;
   $("r-name2").textContent = t.name;
   $("r-sub").textContent = t.sub;
@@ -501,7 +530,7 @@ function finish(){
   $("r-junbi-num").textContent = `${y} / 7`;
   let read;
   if (y <= 2) read = "仕組みがまだ無い段階。最初の3手は「仕組みを1つ作る」ことに絞ってください。";
-  else if (y <= 4) read = "仕組みの穴が2〜3か所。下の空白が、そのまま次の一手です。";
+  else if (y <= 4) read = "仕組みの穴が3〜4か所。下の空白が、そのまま次の一手です。";
   else if (y < 7) read = "仕組みはほぼ完成。残っている空白は下の1〜2個だけです。";
   else read = "7つ全部そろっています。あとは上の3手で「回している額」を作るだけです。";
   $("r-junbi").textContent = read;
@@ -528,8 +557,13 @@ function copyType(){
 function fallbackCopy(text, done){
   const ta = document.createElement("textarea");
   ta.value = text; document.body.appendChild(ta); ta.select();
-  try { document.execCommand("copy"); done(); } catch(e) {}
+  ta.setSelectionRange(0, ta.value.length);
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch(e) {}
   document.body.removeChild(ta);
+  if (ok) { done(); return; }
+  $("copybtn").textContent = "コピーできませんでした。上のタイプ名を長押しで選択してください";
+  setTimeout(()=>{ $("copybtn").textContent = "タイプ名をコピーする"; }, 3500);
 }
 </script>
 </body>
