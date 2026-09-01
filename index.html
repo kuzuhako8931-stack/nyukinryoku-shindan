@@ -5,34 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>入金力の現在地診断｜入金力ラボ</title>
-<meta name="description" content="「何をやるか」より「何からやるか」。13回タップで、あなたが止まっている場所と最初の3手が出ます。">
+<meta name="description" content="知ってるのに、増えない。原因は知識ではなく、やる順番。13回タップで「最初にやること」が1つに絞られます。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kuzuhako8931-stack.github.io/nyukinryoku-shindan/">
 <meta property="og:title" content="入金力の現在地診断｜入金力ラボ">
-<meta property="og:description" content="「何をやるか」より「何からやるか」。13回タップで、あなたが止まっている場所と最初の3手が出ます。">
+<meta property="og:description" content="知ってるのに、増えない。原因は知識ではなく、やる順番。13回タップで「最初にやること」が1つに絞られます。">
 <meta property="og:site_name" content="入金力ラボ">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#070c16">
+<meta name="theme-color" content="#0e1626">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
     color-scheme: dark;
-    --bg: #070c16;
-    --panel: #0c1322;
-    --card: #121c30;
-    --card-hi: #16233c;
-    --line: #1f2c48;
-    --ink: #e8edf6;
-    --sub: #9aa8bf;
-    --faint: #74849c;
+    --bg: #0e1626;
+    --panel: #131d31;
+    --card: #1a2540;
+    --card-hi: #21304f;
+    --line: #2b3a5c;
+    --ink: #edf1f8;
+    --sub: #a9b5ca;
+    --faint: #8090a8;
     --amber: #f0b64e;
     --amber-dim: rgba(240,182,78,.16);
     --green: #06c755;
-    --warn-bg: #241c0e;
-    --warn-line: #5d4a20;
-    --warn-ink: #f0d296;
+    --warn-bg: #2c2410;
+    --warn-line: #6d5628;
+    --warn-ink: #f2d69e;
     --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -72,6 +72,12 @@
   .progress > div { height: 100%; width: 0%; background: var(--amber); border-radius: 2px; box-shadow: 0 0 10px rgba(240,182,78,.7); transition: width .35s cubic-bezier(.4,0,.2,1); }
 
   main { flex: 1; padding: 26px 22px 44px; }
+  #s-intro { position: relative; }
+  #s-intro::before {
+    content: ""; position: absolute; top: -70px; left: 50%; transform: translateX(-50%);
+    width: 420px; height: 260px; pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(240,182,78,.12) 0%, transparent 65%);
+  }
 
   .screen { display: none; }
   .screen.active { display: block; animation: rise .35s cubic-bezier(.2,.7,.3,1); }
@@ -116,10 +122,14 @@
     color: #1a1206; font-size: 16.5px; padding: 18px; font-weight: 900;
     letter-spacing: .04em; box-shadow: 0 8px 28px rgba(240,182,78,.35);
   }
-  .btn-primary span { color: #6b4c0e; }
+  .btn-primary span { color: #6b4c0e; font-size: 13px; }
   .intro-foot { font-size: 11px; color: var(--faint); text-align: center; margin-top: 12px; }
 
   /* ---------- question ---------- */
+  #s-q > div[aria-live] {
+    background: var(--card); border: 1px solid var(--line); border-top: 2px solid var(--amber);
+    border-radius: 16px; padding: 20px 20px 14px; margin-bottom: 20px;
+  }
   .qhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
   .qbadge {
     font-size: 11px; font-weight: 700; letter-spacing: .18em; color: var(--amber); font-family: var(--mono);
@@ -128,7 +138,7 @@
     font-size: 20px; font-weight: 900; line-height: 1.65; letter-spacing: .01em; color: #fff;
     min-height: 4.9em; margin-bottom: 4px;
   }
-  .qnote { font-size: 12px; color: var(--sub); margin-bottom: 24px; min-height: 1.8em; }
+  .qnote { font-size: 12px; color: var(--sub); margin-bottom: 6px; min-height: 1.8em; }
 
   .btn-ans {
     font-size: 16.5px; padding: 17px; margin-bottom: 12px; font-weight: 900;
@@ -266,9 +276,9 @@
     <!-- intro -->
     <section class="screen active" id="s-intro">
       <div class="eyebrow">地方会社員のための現在地診断</div>
-      <h1>「何をやるか」より、<br><span class="u">「何からやるか」。</span></h1>
-      <p class="lead">NISAも、固定費の見直しも、やり方はもう知っているはず。それでも資産が増えないのは、意志が弱いからではありません。<b>順番が決まっていないから</b>です。</p>
-      <p class="kicker">13回タップすると、あなたが止まっている場所が出ます。</p>
+      <h1>知ってるのに、<br><span class="u">増えない。</span></h1>
+      <p class="lead">NISAも、固定費の見直しも、やり方はもう知っているはず。それでも増えないのは、意志が弱いからではありません。<b>やる順番が決まっていないから</b>です。</p>
+      <p class="kicker">13回タップで、「最初にやること」が1つに絞られます。</p>
       <div class="types-row">
         <div class="type-chip">時間不足型</div>
         <div class="type-chip">固定費過多型</div>
@@ -281,7 +291,7 @@
         <div><b>送信なし</b>回答は端末内だけ</div>
         <div><b>登録不要</b>結果は即表示</div>
       </div>
-      <button class="btn btn-primary" onclick="start()">現在地を出す<span>　→</span></button>
+      <button class="btn btn-primary" onclick="start()">診断をはじめる<span>　30秒 →</span></button>
       <div class="intro-foot">迷った質問は「いいえ」でOK。正確さより速さです。</div>
     </section>
 
