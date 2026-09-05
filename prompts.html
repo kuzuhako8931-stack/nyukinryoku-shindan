@@ -5,59 +5,106 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>伴走プロンプト｜入金力ラボ</title>
-<meta name="theme-color" content="#0e1626">
+<meta name="theme-color" content="#0F3A1E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
+  /* 双葉デザインv2（2026-09-05）: 深緑の外側・クリームの内側・金のヘアライン・黄緑の光。index.html と同じトークン */
   :root{
-    color-scheme:dark;
-    --bg:#0e1626; --panel:#131d31; --card:#1a2540; --card-hi:#21304f;
-    --line:#2b3a5c; --ink:#edf1f8; --sub:#a9b5ca; --faint:#8090a8;
-    --amber:#f0b64e; --amber-dim:rgba(240,182,78,.16); --green:#06c755;
-    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    color-scheme:light;
+    --g1:#0F3A1E; --g2:#123D1F;
+    --cream:#F6F5EE; --lime:#8DDB16; --gold:#E7B84B; --gold-soft:rgba(231,184,75,.55);
+    --ink:#0B3D20; --ink-2:#1E2B24; --ink-3:#56665C;
+    --on-g:#FFFFFF; --on-g2:#DCE8DF; --on-g3:#B7CBBD; --rule:#E1DDCD;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{height:100%}
+  html,body{overflow-x:hidden}
   body{
     font-family:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
-    font-weight:500;background:var(--bg);color:var(--ink);line-height:1.8;
+    font-weight:500;background:var(--g2);color:var(--on-g);line-height:1.8;
     display:flex;justify-content:center;min-height:100%;
   }
-  .app{width:100%;max-width:460px;min-height:100dvh;background:var(--panel);box-shadow:0 0 80px rgba(0,0,0,.55);display:flex;flex-direction:column}
-  header{border-bottom:1px solid var(--line);padding:16px 22px 14px}
-  .brand{font-weight:900;letter-spacing:.16em;font-size:14px;color:#fff}
-  .brand small{display:block;font-size:9px;letter-spacing:.3em;color:var(--amber);font-weight:700;margin-top:1px;font-family:var(--mono)}
+  .app{
+    width:100%;max-width:460px;min-height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden;
+    background:linear-gradient(172deg,#10401F 0%,var(--g1) 45%,var(--g2) 100%);
+    box-shadow:0 0 80px rgba(0,0,0,.45);
+  }
+  .app::before{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 86% 4%,rgba(231,184,75,.55) 0 1.6px,transparent 2.6px),
+      radial-gradient(circle at 92% 9%,rgba(231,184,75,.35) 0 1px,transparent 2px),
+      radial-gradient(circle at 78% 7%,rgba(231,184,75,.3) 0 1.2px,transparent 2.2px),
+      radial-gradient(circle at 8% 92%,rgba(231,184,75,.45) 0 1.4px,transparent 2.4px),
+      radial-gradient(circle at 14% 88%,rgba(231,184,75,.3) 0 1px,transparent 2px),
+      radial-gradient(ellipse 80% 30% at 50% 22%,rgba(60,160,90,.22) 0%,transparent 70%),
+      radial-gradient(rgba(255,255,255,.05) .8px,transparent .9px) 0 0/14px 14px;
+  }
+  .app::after{
+    content:"";position:absolute;left:-20%;top:30%;width:140%;height:110px;pointer-events:none;z-index:0;transform:rotate(-16deg);
+    background:linear-gradient(90deg,transparent 0%,rgba(141,219,22,.14) 30%,rgba(141,219,22,.2) 55%,transparent 100%);
+    filter:blur(14px);
+  }
+  .app>*{position:relative;z-index:1}
+  header{border-bottom:1px solid rgba(255,255,255,.12);padding:16px 22px 14px}
+  .brand{font-weight:900;letter-spacing:.16em;font-size:14px;color:var(--on-g)}
+  .brand small{display:block;font-size:9px;letter-spacing:.3em;color:var(--lime);font-weight:700;margin-top:1px}
   main{flex:1;padding:24px 22px 44px}
-  .eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--amber);background:var(--amber-dim);border:1px solid rgba(240,182,78,.3);border-radius:999px;padding:4px 14px;margin-bottom:14px}
-  h1{font-size:24px;line-height:1.5;font-weight:900;color:#fff}
-  .lead{font-size:13px;color:var(--sub);margin-top:10px}
-  .lead b{color:var(--ink)}
-  .chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0 20px}
-  .chip{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;font-size:13px;font-weight:900;color:var(--ink);cursor:pointer;font-family:inherit;transition:border-color .15s,background .15s}
-  .chip.on{border-color:var(--amber);background:var(--card-hi);color:var(--amber)}
-  .pcard{background:var(--card);border:1px solid var(--line);border-top:2px solid var(--amber);border-radius:16px;padding:20px;margin-bottom:14px}
-  .pcard .t{font-size:20px;font-weight:900;color:#fff}
-  .pcard .d{font-size:12.5px;color:var(--sub);margin:8px 0 16px}
+
+  .cream{
+    background:var(--cream);color:var(--ink-2);border-radius:16px;border:1.5px solid var(--gold);
+    box-shadow:inset 0 0 0 4px var(--cream),inset 0 0 0 5px rgba(231,184,75,.7),0 14px 34px rgba(0,0,0,.35);
+  }
+  .tab{
+    position:absolute;top:-12px;left:16px;background:var(--lime);color:var(--ink);font-weight:900;font-size:13px;
+    letter-spacing:.08em;padding:3px 12px;border-radius:8px;line-height:1.5;box-shadow:0 4px 10px rgba(0,0,0,.25);
+  }
+
+  .eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--on-g);background:rgba(255,255,255,.06);border:1px solid var(--gold-soft);border-radius:999px;padding:4px 14px;margin-bottom:14px}
+  h1{font-size:clamp(20px,6.8vw,26px);line-height:1.5;font-weight:900;color:var(--on-g)}
+  h1 .u{background:linear-gradient(transparent 84%,var(--gold) 84%)}
+  .lead{font-size:14px;color:var(--on-g2);margin-top:12px}
+  .lead b{color:var(--on-g);font-weight:700}
+
+  .chips-t{font-size:13px;font-weight:700;color:var(--on-g);margin-top:22px;letter-spacing:.04em}
+  .chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 22px}
+  .chip{
+    background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.35);border-radius:12px;padding:12px;min-height:48px;
+    font-size:14px;font-weight:900;color:var(--on-g);cursor:pointer;font-family:inherit;transition:border-color .15s,background .15s;
+  }
+  .chip.on{background:var(--cream);border-color:var(--gold);color:var(--ink);box-shadow:0 8px 20px rgba(0,0,0,.28)}
+
+  .pcard{position:relative;padding:26px 20px 20px;margin-bottom:14px}
+  .pcard .t{font-size:22px;font-weight:900;color:var(--ink);line-height:1.4}
+  .pcard .d{font-size:13.5px;color:var(--ink-2);margin:8px 0 16px;padding-bottom:12px;border-bottom:2px dotted var(--lime)}
   .btn-copy{
     display:block;width:100%;border:none;cursor:pointer;border-radius:14px;font-family:inherit;
-    background:linear-gradient(160deg,#f5c56a 0%,var(--amber) 58%,#d99e33 100%);
-    color:#1a1206;font-size:16px;padding:16px;font-weight:900;letter-spacing:.04em;
-    box-shadow:0 8px 28px rgba(240,182,78,.3);transition:transform .08s ease;
+    background:linear-gradient(160deg,#F4D07C 0%,var(--gold) 55%,#CFA03A 100%);
+    color:var(--ink);font-size:16.5px;padding:17px;font-weight:900;letter-spacing:.04em;
+    box-shadow:0 10px 28px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.35);transition:transform .08s ease;
   }
   .btn-copy:active{transform:scale(.98)}
-  .copy-note{font-size:11px;color:var(--faint);text-align:center;margin-top:10px;line-height:1.7}
-  .how{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin-bottom:14px}
-  .how .ht{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--amber);font-family:var(--mono);margin-bottom:8px}
+  .copy-note{font-size:13px;color:var(--ink-3);text-align:center;margin-top:10px;line-height:1.7}
+
+  .how{position:relative;padding:24px 20px 16px;margin-bottom:14px}
   .how ol{list-style:none}
-  .how li{font-size:13px;color:var(--sub);padding:4px 0}
+  .how li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink-2);padding:7px 0;border-bottom:1px dashed var(--rule)}
+  .how li:last-child{border-bottom:none}
   .how li b{color:var(--ink)}
-  details{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:14px;overflow:hidden}
-  summary{padding:14px 20px;font-size:13px;font-weight:900;color:var(--ink);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
-  summary::after{content:"▾";color:var(--amber)}
+  .how .n{flex:none;width:28px;height:28px;border-radius:8px;background:var(--lime);color:var(--ink);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+
+  details{margin-bottom:14px;overflow:hidden}
+  summary{padding:16px 20px;font-size:14px;font-weight:900;color:var(--ink);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:48px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"▾";color:var(--gold);font-size:16px}
   details[open] summary::after{content:"▴"}
-  .ptext{padding:0 20px 18px;font-size:12px;color:var(--sub);white-space:pre-wrap;line-height:1.9;border-top:1px dashed var(--line);padding-top:14px;margin:0 0}
-  footer{padding:20px 22px 32px;font-size:10.5px;color:var(--faint);text-align:center;line-height:1.9;border-top:1px solid var(--line)}
+  .ptext{padding:14px 20px 18px;font-size:13px;color:var(--ink-2);white-space:pre-wrap;line-height:1.9;border-top:2px dotted var(--lime);margin:0 16px 4px;padding-left:4px;padding-right:4px}
+
+  .back-line{text-align:center;font-size:13.5px;color:var(--on-g2);margin-top:6px;line-height:1.8}
+  .back-line b{color:var(--on-g)}
+  footer{padding:20px 22px 32px;font-size:12.5px;color:var(--on-g3);text-align:center;line-height:1.9;border-top:1px solid rgba(255,255,255,.12)}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -68,32 +115,36 @@
   </header>
   <main>
     <div class="eyebrow">診断結果からの次の一歩</div>
-    <h1>AIと10分、<br>今週の一手を決める。</h1>
+    <h1>AIと10分、<br><span class="u">今週の一手を決める。</span></h1>
     <p class="lead">診断で出た「最初の3手」を、AIがコーチになって一緒に進めるプロンプトです。<b>あなたのタイプ</b>を選んでコピーしてください。</p>
 
+    <div class="chips-t">あなたのタイプを選ぶ</div>
     <div class="chips" id="chips"></div>
 
-    <div class="pcard">
+    <div class="cream pcard">
+      <div class="tab">伴走プロンプト</div>
       <div class="t" id="p-name"></div>
       <div class="d" id="p-desc"></div>
       <button class="btn-copy" id="copybtn" onclick="copyPrompt()">プロンプトを全文コピー</button>
       <div class="copy-note">コピーしたら、ChatGPTかClaude（無料版でOK）に貼って送信。<br>コピーできない場合は下の全文を長押しで選択してください。</div>
     </div>
 
-    <div class="how">
-      <div class="ht">HOW TO</div>
+    <div class="cream how">
+      <div class="tab">使い方</div>
       <ol>
-        <li><b>1.</b> 上のボタンでプロンプトをコピー</li>
-        <li><b>2.</b> ChatGPTかClaudeに貼って送信</li>
-        <li><b>3.</b> AIの質問に1つずつ答える（約10分）</li>
-        <li><b>4.</b> 最後に出る「今週の一手」をLINEに返信</li>
+        <li><span class="n">1</span><span>上のボタンで<b>プロンプトをコピー</b></span></li>
+        <li><span class="n">2</span><span><b>ChatGPTかClaude</b>に貼って送信</span></li>
+        <li><span class="n">3</span><span>AIの質問に<b>1つずつ答える</b>（約10分）</span></li>
+        <li><span class="n">4</span><span>最後に出る<b>「今週の一手」をLINEに返信</b></span></li>
       </ol>
     </div>
 
-    <details>
+    <details class="cream">
       <summary>プロンプト全文を見る</summary>
       <div class="ptext" id="p-full"></div>
     </details>
+
+    <div class="back-line">詰まったら、その状況を<b>LINEに返信</b>してください。<br>かずとしが直接返します。</div>
   </main>
   <footer>
     このプロンプトは一般的な情報提供であり、特定の金融商品の勧誘・投資助言ではありません。<br>
