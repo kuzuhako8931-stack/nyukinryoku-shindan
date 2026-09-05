@@ -17,28 +17,29 @@
 <meta property="og:image:alt" content="入金力の現在地診断｜13回タップで、最初の一手が決まる">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://kuzuhako8931-stack.github.io/nyukinryoku-shindan/og.jpg">
-<meta name="theme-color" content="#0e1626">
+<meta name="theme-color" content="#0F3A1E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
+  /* 双葉デザインv2（2026-09-05）: 深緑の外側・クリームの内側・金のヘアライン・黄緑の光 */
   :root {
-    color-scheme: dark;
-    --bg: #0e1626;
-    --panel: #131d31;
-    --card: #1a2540;
-    --card-hi: #21304f;
-    --line: #2b3a5c;
-    --ink: #edf1f8;
-    --sub: #a9b5ca;
-    --faint: #8090a8;
-    --amber: #f0b64e;
-    --amber-dim: rgba(240,182,78,.16);
-    --green: #06c755;
-    --warn-bg: #2c2410;
-    --warn-line: #6d5628;
-    --warn-ink: #f2d69e;
-    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    color-scheme: light;
+    --g1: #0F3A1E;
+    --g2: #123D1F;
+    --cream: #F6F5EE;
+    --cream-2: #ECEAE0;
+    --lime: #8DDB16;
+    --gold: #E7B84B;
+    --gold-soft: rgba(231,184,75,.55);
+    --ink: #0B3D20;
+    --ink-2: #1E2B24;
+    --ink-3: #56665C;
+    --on-g: #FFFFFF;
+    --on-g2: #DCE8DF;
+    --on-g3: #B7CBBD;
+    --rule: #E1DDCD;
+    --line-green: #06C755;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { height: 100%; }
@@ -46,8 +47,8 @@
   body {
     font-family: "Zen Kaku Gothic New", "Hiragino Sans", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
     font-weight: 500;
-    background: var(--bg);
-    color: var(--ink);
+    background: var(--g2);
+    color: var(--on-g);
     line-height: 1.8;
     display: flex;
     justify-content: center;
@@ -59,63 +60,85 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: var(--panel);
-    box-shadow: 0 0 80px rgba(0,0,0,.55);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(172deg, #10401F 0%, var(--g1) 45%, var(--g2) 100%);
+    box-shadow: 0 0 80px rgba(0,0,0,.45);
   }
+  /* 背景の奥行き：微細な網点＋金の粒子＋エメラルドの光の帯 */
+  .app::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(circle at 86% 4%, rgba(231,184,75,.55) 0 1.6px, transparent 2.6px),
+      radial-gradient(circle at 92% 9%, rgba(231,184,75,.35) 0 1px, transparent 2px),
+      radial-gradient(circle at 78% 7%, rgba(231,184,75,.3) 0 1.2px, transparent 2.2px),
+      radial-gradient(circle at 8% 92%, rgba(231,184,75,.45) 0 1.4px, transparent 2.4px),
+      radial-gradient(circle at 14% 88%, rgba(231,184,75,.3) 0 1px, transparent 2px),
+      radial-gradient(ellipse 80% 30% at 50% 22%, rgba(60,160,90,.22) 0%, transparent 70%),
+      radial-gradient(rgba(255,255,255,.05) .8px, transparent .9px) 0 0 / 14px 14px;
+  }
+  /* 斜めの黄緑の平筆ストローク1本（奥） */
+  .app::after {
+    content: ""; position: absolute; left: -20%; top: 30%; width: 140%; height: 110px;
+    pointer-events: none; z-index: 0; transform: rotate(-16deg);
+    background: linear-gradient(90deg, transparent 0%, rgba(141,219,22,.14) 30%, rgba(141,219,22,.2) 55%, transparent 100%);
+    filter: blur(14px);
+  }
+  .app > * { position: relative; z-index: 1; }
 
   header {
-    background: var(--panel);
-    border-bottom: 1px solid var(--line);
-    color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    color: var(--on-g);
     padding: 16px 22px 12px;
   }
   .head-row { display: flex; justify-content: space-between; align-items: baseline; }
   .brand { font-weight: 900; letter-spacing: .16em; font-size: 14px; }
-  .brand small { display:block; font-size: 9px; letter-spacing: .3em; color: var(--amber); font-weight: 700; margin-top: 1px; font-family: var(--mono); }
-  .pcount { font-size: 13px; font-weight: 700; color: var(--faint); letter-spacing: .08em; font-family: var(--mono); }
-  .pcount b { color: var(--amber); font-size: 16px; }
-  .progress { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 10px; }
-  .progress > div { height: 100%; width: 0%; background: var(--amber); border-radius: 2px; box-shadow: 0 0 10px rgba(240,182,78,.7); transition: width .35s cubic-bezier(.4,0,.2,1); }
+  .brand small { display:block; font-size: 9px; letter-spacing: .3em; color: var(--lime); font-weight: 700; margin-top: 1px; }
+  .pcount { font-size: 13px; font-weight: 700; color: var(--on-g3); letter-spacing: .08em; }
+  .pcount b { color: var(--gold); font-size: 16px; }
+  .progress { height: 4px; background: rgba(255,255,255,.14); border-radius: 2px; overflow: hidden; margin-top: 10px; }
+  .progress > div { height: 100%; width: 0%; background: var(--lime); border-radius: 2px; box-shadow: 0 0 10px rgba(141,219,22,.7); transition: width .35s cubic-bezier(.4,0,.2,1); }
 
   main { flex: 1; padding: 26px 22px 44px; }
-  #s-intro { position: relative; }
-  #s-intro::before {
-    content: ""; position: absolute; top: -70px; left: 0; right: 0;
-    height: 260px; pointer-events: none;
-    background: radial-gradient(ellipse at center, rgba(240,182,78,.12) 0%, transparent 65%);
-  }
 
   .screen { display: none; }
   .screen.active { display: block; animation: rise .35s cubic-bezier(.2,.7,.3,1); }
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
+  /* クリームカード（金のヘアライン二重枠＋深い影） */
+  .cream {
+    background: var(--cream); color: var(--ink-2); border-radius: 16px;
+    border: 1.5px solid var(--gold);
+    box-shadow: inset 0 0 0 4px var(--cream), inset 0 0 0 5px rgba(231,184,75,.7), 0 14px 34px rgba(0,0,0,.35);
+  }
+  .tab {
+    position: absolute; top: -12px; left: 16px;
+    background: var(--lime); color: var(--ink); font-weight: 900; font-size: 13px;
+    letter-spacing: .08em; padding: 3px 12px; border-radius: 8px; line-height: 1.5;
+    box-shadow: 0 4px 10px rgba(0,0,0,.25);
+  }
+
   /* ---------- intro ---------- */
   .eyebrow {
     display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .14em;
-    color: var(--amber); background: var(--amber-dim); border: 1px solid rgba(240,182,78,.3);
+    color: var(--on-g); background: rgba(255,255,255,.06); border: 1px solid var(--gold-soft);
     border-radius: 999px; padding: 4px 14px; margin-bottom: 16px;
   }
-  h1 { font-size: clamp(20px, 6.8vw, 30px); line-height: 1.42; font-weight: 900; letter-spacing: .02em; color: #fff; }
-  h1 .u { background: linear-gradient(transparent 84%, var(--amber) 84%); }
-  .lead { font-size: 14px; color: var(--sub); margin-top: 14px; }
-  .lead b { color: var(--ink); font-weight: 700; }
-  .kicker { font-size: 13.5px; color: var(--ink); font-weight: 700; margin-top: 14px; }
+  h1 { font-size: clamp(20px, 6.8vw, 30px); line-height: 1.42; font-weight: 900; letter-spacing: .02em; color: var(--on-g); }
+  h1 .u { background: linear-gradient(transparent 84%, var(--gold) 84%); }
+  .lead { font-size: 14px; color: var(--on-g2); margin-top: 14px; }
+  .lead b { color: var(--on-g); font-weight: 700; }
+  .trust-line { font-size: 13px; color: var(--on-g3); text-align: center; margin-top: 10px; letter-spacing: .04em; }
+  .kicker { font-size: 13.5px; color: var(--on-g); font-weight: 700; margin-top: 26px; }
 
-  .types-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0 6px; }
+  .types-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0 6px; }
   .type-chip {
-    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-    padding: 9px 12px; font-size: 13px; font-weight: 700; color: var(--ink);
-    display: flex; align-items: center; gap: 8px;
+    background: var(--cream); border: 1px solid var(--gold-soft); border-radius: 10px;
+    padding: 9px 12px; font-size: 13px; font-weight: 900; color: var(--ink);
+    display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 16px rgba(0,0,0,.22);
   }
-  .type-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px rgba(240,182,78,.8); flex: none; }
-  .types-note { font-size: 13px; color: var(--faint); margin-bottom: 18px; }
-
-  .trust { display: flex; gap: 8px; margin: 16px 0 22px; }
-  .trust div {
-    font-size: 13px; color: var(--faint); line-height: 1.5; flex: 1; text-align: center;
-    background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 4px;
-  }
-  .trust div b { display: block; font-size: 14px; color: var(--ink); font-weight: 900; margin-bottom: 2px; }
+  .type-chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 8px rgba(141,219,22,.8); flex: none; }
+  .types-note { font-size: 13px; color: var(--on-g3); margin-bottom: 18px; }
 
   .btn {
     display: block; width: 100%; border: none; cursor: pointer;
@@ -124,152 +147,129 @@
   }
   .btn:active { transform: scale(.98); }
   .btn-primary {
-    background: linear-gradient(160deg, #f5c56a 0%, var(--amber) 60%, #d99e33 100%);
-    color: #1a1206; font-size: 16.5px; padding: 18px; font-weight: 900;
-    letter-spacing: .04em; box-shadow: 0 8px 28px rgba(240,182,78,.35);
+    margin-top: 22px;
+    background: linear-gradient(160deg, #F4D07C 0%, var(--gold) 55%, #CFA03A 100%);
+    color: var(--ink); font-size: 16.5px; padding: 18px; font-weight: 900;
+    letter-spacing: .04em; box-shadow: 0 10px 28px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.35);
   }
-  .btn-primary span { color: #6b4c0e; font-size: 13.5px; }
-  .intro-foot { font-size: 13px; color: var(--faint); text-align: center; margin-top: 12px; }
+  .btn-primary span { color: #5A4310; font-size: 13.5px; margin-left: 8px; }
+  .intro-foot { font-size: 13px; color: var(--on-g3); text-align: center; margin-top: 4px; }
 
   /* ---------- question ---------- */
-  #s-q > div[aria-live] {
-    background: var(--card); border: 1px solid var(--line); border-top: 2px solid var(--amber);
-    border-radius: 16px; padding: 20px 20px 14px; margin-bottom: 20px;
-  }
-  .qhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
-  .qbadge {
-    font-size: 13px; font-weight: 700; letter-spacing: .18em; color: var(--amber); font-family: var(--mono);
-  }
+  .qcard { position: relative; padding: 26px 20px 14px; margin-bottom: 20px; }
   .qtext {
-    font-size: 20px; font-weight: 900; line-height: 1.65; letter-spacing: .01em; color: #fff;
+    font-size: 20px; font-weight: 900; line-height: 1.65; letter-spacing: .01em; color: var(--ink);
     min-height: 4.9em; margin-bottom: 4px;
   }
-  .qnote { font-size: 13px; color: var(--sub); margin-bottom: 6px; min-height: 1.8em; }
+  .qnote { font-size: 13px; color: var(--ink-3); margin-bottom: 6px; min-height: 1.8em; }
 
   .btn-ans {
     font-size: 16.5px; padding: 17px; margin-bottom: 12px; font-weight: 900;
-    background: var(--card); color: var(--ink); border: 1.5px solid var(--line);
+    background: var(--cream); color: var(--ink); border: 1.5px solid var(--gold-soft);
     display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
   }
-  .btn-ans .mk { font-size: 14px; color: var(--amber); font-weight: 900; font-family: var(--mono); }
-  .btn-ans:hover { border-color: var(--amber); background: var(--card-hi); }
+  .btn-ans .mk { font-size: 14px; color: var(--ink-3); font-weight: 900; }
+  .btn-ans:hover { border-color: var(--gold); background: #FFFDF5; }
   .btn-back {
-    background: none; border: none; color: var(--sub); font-size: 14px; padding: 13px 12px;
+    background: none; border: none; color: var(--on-g2); font-size: 14px; padding: 13px 12px;
     min-height: 44px; width: 100%; margin-top: 4px; cursor: pointer; font-family: inherit; font-weight: 700;
   }
-  .btn-back:hover { color: var(--ink); }
-  .q-hint { font-size: 13px; color: var(--faint); text-align: center; margin-top: 2px; line-height: 1.7; }
-  .q-hint b { color: var(--sub); }
+  .btn-back:hover { color: var(--on-g); }
+  .q-hint { font-size: 13px; color: var(--on-g3); text-align: center; margin-top: 2px; line-height: 1.7; }
+  .q-hint b { color: var(--on-g2); }
 
   /* ---------- result ---------- */
-  .r-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .24em; color: var(--faint); margin-bottom: 10px; font-family: var(--mono); }
   .r-hero {
-    background: linear-gradient(160deg, var(--card-hi) 0%, var(--card) 100%);
-    border: 1px solid var(--line); border-top: 2px solid var(--amber);
-    color: #fff; border-radius: 18px; padding: 26px 24px 24px; margin-bottom: 12px;
-    position: relative; overflow: hidden;
+    position: relative; text-align: center;
+    padding: 30px 22px 24px; margin: 14px 0 12px;
   }
-  .r-hero::after {
-    content: ""; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px;
-    border-radius: 50%; background: radial-gradient(circle, rgba(240,182,78,.18) 0%, transparent 70%);
-  }
-  .r-hero .cap { font-size: 13px; font-weight: 700; letter-spacing: .14em; color: var(--amber); margin-bottom: 6px; font-family: var(--mono); }
-  .r-hero .t-name { font-size: 34px; font-weight: 900; line-height: 1.25; letter-spacing: .02em; }
-  .r-hero .t-sub { font-size: 13.5px; color: var(--sub); margin-top: 8px; line-height: 1.7; }
+  .r-hero .cap { font-size: 13px; font-weight: 700; letter-spacing: .14em; color: var(--ink-3); margin-bottom: 4px; }
+  .r-hero .t-name { font-size: 34px; font-weight: 900; line-height: 1.25; letter-spacing: .02em; color: var(--ink); }
+  .arc { display: flex; justify-content: center; align-items: center; gap: 6px; margin: 10px auto 10px; }
+  .arc::before, .arc::after { content: ""; height: 2px; width: 22%; background: var(--lime); border-radius: 2px; box-shadow: 0 0 8px rgba(141,219,22,.6); }
+  .arc i { width: 6px; height: 6px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 8px rgba(141,219,22,.8); }
+  .arc i:nth-child(2) { width: 8px; height: 8px; }
+  .r-hero .t-sub { font-size: 13.5px; color: var(--ink-2); line-height: 1.7; }
 
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-    padding: 18px 20px; margin-bottom: 12px;
+  .card { padding: 18px 20px; margin-bottom: 12px; }
+  .card-t {
+    font-size: 14px; font-weight: 900; letter-spacing: .06em; color: var(--ink);
+    padding-bottom: 8px; margin-bottom: 10px; border-bottom: 2px dotted var(--lime);
   }
-  .card-t { font-size: 13px; font-weight: 700; letter-spacing: .18em; color: var(--amber); margin-bottom: 8px; font-family: var(--mono); }
-  .card p { font-size: 14px; color: var(--sub); }
+  .card p { font-size: 14px; color: var(--ink-2); }
   .card p b { color: var(--ink); }
 
   .exception {
-    background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 16px;
-    padding: 16px 20px; font-size: 13.5px; color: var(--warn-ink); margin-bottom: 12px; line-height: 1.75;
+    background: #FBF3DC; border: 1.5px solid var(--gold); border-radius: 16px;
+    padding: 16px 20px; font-size: 13.5px; color: #4A3A10; margin-bottom: 12px; line-height: 1.75;
+    box-shadow: 0 10px 24px rgba(0,0,0,.28);
   }
-  .exception b { display: block; font-size: 13px; letter-spacing: .12em; margin-bottom: 4px; }
+  .exception b { display: block; font-size: 13px; letter-spacing: .12em; margin-bottom: 4px; color: var(--ink); }
 
   .skip-list { list-style: none; }
   .skip-list li {
     font-size: 14px; font-weight: 700; color: var(--ink);
-    padding: 8px 0 8px 30px; position: relative; border-bottom: 1px dashed var(--line);
+    padding: 8px 0 8px 30px; position: relative; border-bottom: 1px dashed var(--rule);
   }
   .skip-list li:last-child { border-bottom: none; }
-  .skip-list li::before {
-    content: "✕"; position: absolute; left: 4px; color: var(--faint); font-weight: 900;
-  }
-  .skip-note { font-size: 13px; color: var(--sub); margin-top: 8px; }
+  .skip-list li::before { content: "✕"; position: absolute; left: 4px; color: var(--ink-3); font-weight: 900; }
+  .skip-note { font-size: 13px; color: var(--ink-3); margin-top: 8px; }
 
   .steps-wrap { margin: 4px 0 0; }
-  .step {
-    display: flex; gap: 14px; padding: 14px 0;
-    border-bottom: 1px solid var(--line);
-  }
+  .step { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
   .step:last-child { border-bottom: none; }
   .step .n {
-    flex: none; width: 32px; height: 32px; border-radius: 50%;
-    background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(240,182,78,.35);
-    font-weight: 900; font-size: 15px; font-family: var(--mono);
+    flex: none; width: 32px; height: 32px; border-radius: 9px;
+    background: var(--lime); color: var(--ink);
+    font-weight: 900; font-size: 15px;
     display: flex; align-items: center; justify-content: center; margin-top: 2px;
   }
   .step .do { font-size: 14.5px; font-weight: 900; line-height: 1.6; color: var(--ink); }
-  .step .why { font-size: 13px; color: var(--sub); margin-top: 3px; }
-  .steps-foot { font-size: 13px; color: var(--sub); margin-top: 10px; }
+  .step .why { font-size: 13px; color: var(--ink-3); margin-top: 3px; }
+  .steps-foot { font-size: 13px; color: var(--ink-2); margin-top: 10px; }
   .steps-foot b { color: var(--ink); }
 
   .meter { display: flex; gap: 5px; margin: 10px 0 8px; }
-  .meter i { flex: 1; height: 10px; border-radius: 3px; background: var(--line); }
-  .meter i.on { background: var(--amber); box-shadow: 0 0 10px rgba(240,182,78,.55); }
-  .junbi-read { font-size: 13px; color: var(--sub); }
-  .junbi-num { font-size: 16px; font-weight: 700; color: var(--amber); font-family: var(--mono); }
-  .gaps-t { font-size: 13px; font-weight: 700; letter-spacing: .18em; color: var(--amber); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-family: var(--mono); }
+  .meter i { flex: 1; height: 10px; border-radius: 3px; background: var(--rule); }
+  .meter i.on { background: var(--lime); box-shadow: 0 0 8px rgba(141,219,22,.45); }
+  .junbi-read { font-size: 13px; color: var(--ink-2); }
+  .junbi-num { font-size: 16px; font-weight: 900; color: var(--ink); }
+  .gaps-t { font-size: 13px; font-weight: 900; letter-spacing: .06em; color: var(--ink); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--rule); }
   .gap-list { list-style: none; margin-top: 4px; }
-  .gap-list li {
-    font-size: 13.5px; font-weight: 700; color: var(--ink);
-    padding: 7px 0 7px 28px; position: relative;
-  }
+  .gap-list li { font-size: 13.5px; font-weight: 700; color: var(--ink); padding: 7px 0 7px 28px; position: relative; }
   .gap-list li::before {
     content: ""; position: absolute; left: 4px; top: 12px;
-    width: 13px; height: 13px; border: 2px solid var(--amber); border-radius: 3px;
+    width: 13px; height: 13px; border: 2px solid var(--gold); border-radius: 3px;
   }
 
-  .close-line {
-    text-align: center; font-size: 14.5px; font-weight: 900; color: #fff;
-    margin: 26px 0 14px; line-height: 1.9;
-  }
+  .close-line { text-align: center; font-size: 14.5px; font-weight: 900; color: var(--on-g); margin: 26px 0 14px; line-height: 1.9; }
+
   .cta-top { margin: 0 0 14px; }
   .cta-top .btn-line { font-size: 15.5px; padding: 15px; }
-  .cta-top-d { font-size: 13px; color: var(--sub); text-align: center; margin-top: 8px; line-height: 1.7; }
-  .cta-top-d b { color: var(--ink); }
-  .cta-sub { font-size: 13px; color: var(--sub); margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); line-height: 1.8; text-align: left; }
-  .cta-sub b { color: var(--ink); }
-  .cta-sub a { color: var(--amber); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; padding: 6px 0; display: inline-block; }
-  .cta {
-    background: var(--card); border: 1.5px solid var(--green);
-    border-radius: 18px; padding: 22px 20px; text-align: center;
-    box-shadow: 0 0 30px rgba(6,199,85,.12);
-  }
-  .cta .cta-t { font-size: 15px; font-weight: 900; margin-bottom: 6px; color: #fff; }
-  .cta .cta-d { font-size: 13.5px; color: var(--sub); margin-bottom: 16px; }
+  .cta-top-d { font-size: 13px; color: var(--on-g2); text-align: center; margin-top: 8px; line-height: 1.7; }
+  .cta-top-d b { color: var(--on-g); }
+  .cta { padding: 22px 20px; text-align: center; }
+  .cta .cta-t { font-size: 15.5px; font-weight: 900; margin-bottom: 8px; color: var(--ink); line-height: 1.6; }
+  .cta .cta-d { font-size: 13.5px; color: var(--ink-2); margin-bottom: 16px; }
   .cta .cta-d b { color: var(--ink); }
-  .btn-copy {
-    background: var(--card-hi); color: var(--ink); border: 1px solid var(--line);
-    font-size: 14px; padding: 14px; min-height: 48px; margin-top: 12px; font-weight: 700;
-  }
-  .btn-copy:hover { border-color: var(--amber); }
   .btn-line {
-    background: var(--green); color: #fff; font-size: 16px; padding: 16px;
+    background: var(--line-green); color: #fff; font-size: 16px; padding: 16px;
     border-radius: 14px; text-decoration: none; display: block; font-weight: 900;
-    box-shadow: 0 8px 24px rgba(6,199,85,.3);
+    box-shadow: 0 10px 24px rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.25);
   }
-  .copy-hint { font-size: 13px; color: var(--faint); margin-top: 10px; line-height: 1.7; }
+  .copy-hint { font-size: 13px; color: var(--ink-3); margin-top: 10px; line-height: 1.7; }
+  .btn-share {
+    display: block; text-align: center; margin-top: 14px; padding: 13px;
+    border: 1.5px solid rgba(255,255,255,.55); border-radius: 14px; color: var(--on-g);
+    font-size: 14px; font-weight: 700; text-decoration: none; min-height: 48px;
+  }
+  .btn-share:hover { border-color: var(--gold); }
   .retry { text-align: center; margin-top: 8px; }
 
   footer {
-    padding: 20px 22px 32px; font-size: 12.5px; color: var(--faint); text-align: center; line-height: 1.9;
-    border-top: 1px solid var(--line);
+    padding: 20px 22px 32px; font-size: 12.5px; color: var(--on-g3); text-align: center; line-height: 1.9;
+    border-top: 1px solid rgba(255,255,255,.12);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -293,27 +293,23 @@
       <div class="eyebrow">地方会社員のための現在地診断</div>
       <h1>NISAも節約も、やってる。<br><span class="u">なのに、貯金が増えない。</span></h1>
       <p class="lead">貯金が増えないのは、意志が弱いからではありません。NISAも節約も、もうやっている。足りないのは<b>「何から手を付けるか」という順番の知識</b>です。</p>
-      <p class="kicker">13回タップで、「最初にやること」が1つに絞られます。</p>
+      <button class="btn btn-primary" onclick="start()">診断をはじめる<span>13回タップ・30秒 →</span></button>
+      <div class="trust-line">送信なし・登録不要・端末内で完結</div>
+      <p class="kicker">「最初にやること」が、4タイプのどれか1つに絞られます。</p>
       <div class="types-row">
         <div class="type-chip">時間不足型</div>
         <div class="type-chip">固定費過多型</div>
         <div class="type-chip">現金不足型</div>
         <div class="type-chip">準備完了型</div>
       </div>
-      <div class="types-note">4タイプのどれかに必ず当てはまります。タイプごとに「最初の3手」と「やらなくていいこと」が変わります。</div>
-      <div class="trust">
-        <div><b>30秒</b>タップだけ</div>
-        <div><b>送信なし</b>端末内で完結</div>
-        <div><b>登録不要</b>結果は即表示</div>
-      </div>
-      <button class="btn btn-primary" onclick="start()">診断をはじめる<span>　30秒 →</span></button>
+      <div class="types-note">タイプごとに「最初の3手」と「やらなくていいこと」が変わります。</div>
       <div class="intro-foot">迷った質問は「いいえ」でOK。正確さより速さです。</div>
     </section>
 
     <!-- question -->
     <section class="screen" id="s-q">
-      <div aria-live="polite">
-        <div class="qhead"><div class="qbadge" id="qnum"></div></div>
+      <div class="cream qcard" aria-live="polite">
+        <div class="tab" id="qnum"></div>
         <div class="qtext" id="qtext"></div>
         <div class="qnote" id="qnote"></div>
       </div>
@@ -325,37 +321,38 @@
 
     <!-- result -->
     <section class="screen" id="s-result">
-      <div class="r-eyebrow">診断結果</div>
-      <div class="r-hero">
+      <div class="cream r-hero">
+        <div class="tab">診断結果</div>
         <div class="cap">あなたの現在地は</div>
         <div class="t-name" id="r-name"></div>
+        <div class="arc"><i></i><i></i><i></i></div>
         <div class="t-sub" id="r-sub"></div>
       </div>
       <div class="exception" id="r-exception" style="display:none"></div>
 
       <div class="cta-top">
         <a class="btn-line" id="line-top" href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">LINEでタイプ名を送る</a>
-        <div class="cta-top-d">「<b id="r-name3"></b>」が入力済みでLINEが開きます。送ると<b>あなたの「最初の3手」と今週の一手</b>が届きます。下を読んでからでも大丈夫です。</div>
+        <div class="cta-top-d">「<b id="r-name3"></b>」が入力済みでLINEが開きます。送ると、このページには載せていない<b>AIと10分で今週の一手を決める「伴走プロンプト」</b>が届きます。詰まったら、20代で資産2,000万円を作った地方会社員・かずとしが直接返します。</div>
       </div>
 
-      <div class="card">
+      <div class="cream card">
         <div class="card-t">なぜ、ここからか</div>
         <p id="r-why"></p>
       </div>
 
-      <div class="card">
+      <div class="cream card">
         <div class="card-t">いまのあなたが、やらなくていいこと</div>
         <ul class="skip-list" id="r-skip"></ul>
         <div class="skip-note">やめるのではなく「後回しでいい」ということ。順番が来たらやります。</div>
       </div>
 
-      <div class="card">
+      <div class="cream card">
         <div class="card-t">最初の3手（上から順に）</div>
         <div class="steps-wrap" id="r-steps"></div>
         <div class="steps-foot" id="r-note"></div>
       </div>
 
-      <div class="card">
+      <div class="cream card">
         <div class="card-t">仕組みの準備度</div>
         <div class="meter" id="r-meter"></div>
         <div class="junbi-num" id="r-junbi-num"></div>
@@ -367,16 +364,14 @@
 
       <div class="close-line">NISAも節約も、もうやっていた。<br>足りなかったのは、順番の知識だけ。</div>
 
-      <div class="cta">
-        <div class="cta-t">タイプ名をLINEで送ってください</div>
-        <div class="cta-d">「<b id="r-name2"></b>」と送ると、すぐに<b>あなたのタイプの「最初の3手」と今週の一手</b>が届きます。詰まったら、その状況を返信すればかずとしが直接返します。</div>
+      <div class="cream cta">
+        <div class="cta-t">3手は分かった。<br>次は「進める道具」を受け取る</div>
+        <div class="cta-d">「<b id="r-name2"></b>」と送ると、AIがコーチになって今週の一手を一緒に決める<b>タイプ別の伴走プロンプト</b>が届きます。上の3手を、読んで終わりにしないための道具です。</div>
         <a class="btn-line" id="line-bottom" href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">LINEでタイプ名を送る</a>
-        <div class="copy-hint">タイプ名が入力済みのトーク画面が開きます。送信ボタンを押すだけ</div>
-        <div class="cta-sub"><b>まだ友だち追加していない方は</b>、先に <a href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">かずとし公式LINEを追加</a> してから上のボタンを押してください。開かない場合はコピーして貼り付けてもOKです。
-          <button class="btn btn-copy" onclick="copyType()" id="copybtn">タイプ名をコピーする</button>
-        </div>
+        <div class="copy-hint">タイプ名が入力済みのトーク画面が開きます。送信ボタンを押すだけ。友だち追加がまだでも、そのまま進めます。</div>
       </div>
 
+      <a class="btn-share" id="share-x" href="https://x.com/kazu_shisan_os" target="_blank" rel="noopener">結果をXでシェアする</a>
       <div class="retry"><button class="btn-back" onclick="location.reload()">もう一度診断する</button></div>
     </section>
   </main>
@@ -566,6 +561,9 @@ function finish(){
   const oa = LINE_OA_MESSAGE + encodeURIComponent(t.name);
   $("line-top").href = oa;
   $("line-bottom").href = oa;
+  // Xシェア（入口が@kazu_shisan_osなので、診断後にXへ戻る出口を作る）
+  const shareText = `入金力の現在地診断（30秒）をやったら「${t.name}」だった。\n最初にやることが1つに絞られた。\n@kazu_shisan_os の診断はこちら`;
+  $("share-x").href = "https://x.com/intent/post?text=" + encodeURIComponent(shareText) + "&url=" + encodeURIComponent("https://kuzuhako8931-stack.github.io/nyukinryoku-shindan/");
   $("r-sub").textContent = t.sub;
   $("r-why").innerHTML = t.why;
   if (exception) { $("r-exception").innerHTML = "<b>例外ルール適用</b>" + exception; $("r-exception").style.display = "block"; }
@@ -603,24 +601,6 @@ function finish(){
   show("s-result");
 }
 
-function copyType(){
-  const name = $("r-name").textContent;
-  const done = () => { $("copybtn").textContent = "コピーしました ✓"; setTimeout(()=>{ $("copybtn").textContent = "タイプ名をコピーする"; }, 2000); };
-  try {
-    navigator.clipboard.writeText(name).then(done, () => fallbackCopy(name, done));
-  } catch(e) { fallbackCopy(name, done); }
-}
-function fallbackCopy(text, done){
-  const ta = document.createElement("textarea");
-  ta.value = text; document.body.appendChild(ta); ta.select();
-  ta.setSelectionRange(0, ta.value.length);
-  let ok = false;
-  try { ok = document.execCommand("copy"); } catch(e) {}
-  document.body.removeChild(ta);
-  if (ok) { done(); return; }
-  $("copybtn").textContent = "コピーできませんでした。タイプ名を長押しで選択してください";
-  setTimeout(()=>{ $("copybtn").textContent = "タイプ名をコピーする"; }, 2500);
-}
 </script>
 </body>
 </html>
