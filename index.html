@@ -11,7 +11,12 @@
 <meta property="og:title" content="入金力の現在地診断｜入金力ラボ">
 <meta property="og:description" content="NISAも節約も知ってる。なのに、増えない。原因はやる順番。13回タップで「最初にやること」が1つに絞られます。">
 <meta property="og:site_name" content="入金力ラボ">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://kuzuhako8931-stack.github.io/nyukinryoku-shindan/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="入金力の現在地診断｜13回タップで、最初の一手が決まる">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://kuzuhako8931-stack.github.io/nyukinryoku-shindan/og.jpg">
 <meta name="theme-color" content="#0e1626">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,6 +42,7 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { height: 100%; }
+  html, body { overflow-x: hidden; }
   body {
     font-family: "Zen Kaku Gothic New", "Hiragino Sans", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
     font-weight: 500;
@@ -66,16 +72,16 @@
   .head-row { display: flex; justify-content: space-between; align-items: baseline; }
   .brand { font-weight: 900; letter-spacing: .16em; font-size: 14px; }
   .brand small { display:block; font-size: 9px; letter-spacing: .3em; color: var(--amber); font-weight: 700; margin-top: 1px; font-family: var(--mono); }
-  .pcount { font-size: 11px; font-weight: 700; color: var(--faint); letter-spacing: .08em; font-family: var(--mono); }
-  .pcount b { color: var(--amber); font-size: 15px; }
+  .pcount { font-size: 13px; font-weight: 700; color: var(--faint); letter-spacing: .08em; font-family: var(--mono); }
+  .pcount b { color: var(--amber); font-size: 16px; }
   .progress { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 10px; }
   .progress > div { height: 100%; width: 0%; background: var(--amber); border-radius: 2px; box-shadow: 0 0 10px rgba(240,182,78,.7); transition: width .35s cubic-bezier(.4,0,.2,1); }
 
   main { flex: 1; padding: 26px 22px 44px; }
   #s-intro { position: relative; }
   #s-intro::before {
-    content: ""; position: absolute; top: -70px; left: 50%; transform: translateX(-50%);
-    width: 420px; height: 260px; pointer-events: none;
+    content: ""; position: absolute; top: -70px; left: 0; right: 0;
+    height: 260px; pointer-events: none;
     background: radial-gradient(ellipse at center, rgba(240,182,78,.12) 0%, transparent 65%);
   }
 
@@ -85,7 +91,7 @@
 
   /* ---------- intro ---------- */
   .eyebrow {
-    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .18em;
+    display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .14em;
     color: var(--amber); background: var(--amber-dim); border: 1px solid rgba(240,182,78,.3);
     border-radius: 999px; padding: 4px 14px; margin-bottom: 16px;
   }
@@ -98,18 +104,18 @@
   .types-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0 6px; }
   .type-chip {
     background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-    padding: 9px 12px; font-size: 12.5px; font-weight: 700; color: var(--ink);
+    padding: 9px 12px; font-size: 13px; font-weight: 700; color: var(--ink);
     display: flex; align-items: center; gap: 8px;
   }
   .type-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px rgba(240,182,78,.8); flex: none; }
-  .types-note { font-size: 11.5px; color: var(--faint); margin-bottom: 18px; }
+  .types-note { font-size: 13px; color: var(--faint); margin-bottom: 18px; }
 
   .trust { display: flex; gap: 8px; margin: 16px 0 22px; }
   .trust div {
-    font-size: 11px; color: var(--faint); line-height: 1.5; flex: 1; text-align: center;
+    font-size: 13px; color: var(--faint); line-height: 1.5; flex: 1; text-align: center;
     background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 4px;
   }
-  .trust div b { display: block; font-size: 12.5px; color: var(--ink); font-weight: 900; margin-bottom: 2px; }
+  .trust div b { display: block; font-size: 14px; color: var(--ink); font-weight: 900; margin-bottom: 2px; }
 
   .btn {
     display: block; width: 100%; border: none; cursor: pointer;
@@ -122,8 +128,8 @@
     color: #1a1206; font-size: 16.5px; padding: 18px; font-weight: 900;
     letter-spacing: .04em; box-shadow: 0 8px 28px rgba(240,182,78,.35);
   }
-  .btn-primary span { color: #6b4c0e; font-size: 13px; }
-  .intro-foot { font-size: 11px; color: var(--faint); text-align: center; margin-top: 12px; }
+  .btn-primary span { color: #6b4c0e; font-size: 13.5px; }
+  .intro-foot { font-size: 13px; color: var(--faint); text-align: center; margin-top: 12px; }
 
   /* ---------- question ---------- */
   #s-q > div[aria-live] {
@@ -132,13 +138,13 @@
   }
   .qhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
   .qbadge {
-    font-size: 11px; font-weight: 700; letter-spacing: .18em; color: var(--amber); font-family: var(--mono);
+    font-size: 13px; font-weight: 700; letter-spacing: .18em; color: var(--amber); font-family: var(--mono);
   }
   .qtext {
     font-size: 20px; font-weight: 900; line-height: 1.65; letter-spacing: .01em; color: #fff;
     min-height: 4.9em; margin-bottom: 4px;
   }
-  .qnote { font-size: 12px; color: var(--sub); margin-bottom: 6px; min-height: 1.8em; }
+  .qnote { font-size: 13px; color: var(--sub); margin-bottom: 6px; min-height: 1.8em; }
 
   .btn-ans {
     font-size: 16.5px; padding: 17px; margin-bottom: 12px; font-weight: 900;
@@ -148,13 +154,15 @@
   .btn-ans .mk { font-size: 14px; color: var(--amber); font-weight: 900; font-family: var(--mono); }
   .btn-ans:hover { border-color: var(--amber); background: var(--card-hi); }
   .btn-back {
-    background: none; border: none; color: var(--faint); font-size: 12.5px; padding: 12px;
-    width: 100%; margin-top: 4px; cursor: pointer; font-family: inherit; font-weight: 700;
+    background: none; border: none; color: var(--sub); font-size: 14px; padding: 13px 12px;
+    min-height: 44px; width: 100%; margin-top: 4px; cursor: pointer; font-family: inherit; font-weight: 700;
   }
-  .btn-back:hover { color: var(--sub); }
+  .btn-back:hover { color: var(--ink); }
+  .q-hint { font-size: 13px; color: var(--faint); text-align: center; margin-top: 2px; line-height: 1.7; }
+  .q-hint b { color: var(--sub); }
 
   /* ---------- result ---------- */
-  .r-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .24em; color: var(--faint); margin-bottom: 10px; font-family: var(--mono); }
+  .r-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .24em; color: var(--faint); margin-bottom: 10px; font-family: var(--mono); }
   .r-hero {
     background: linear-gradient(160deg, var(--card-hi) 0%, var(--card) 100%);
     border: 1px solid var(--line); border-top: 2px solid var(--amber);
@@ -165,23 +173,23 @@
     content: ""; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px;
     border-radius: 50%; background: radial-gradient(circle, rgba(240,182,78,.18) 0%, transparent 70%);
   }
-  .r-hero .cap { font-size: 11.5px; font-weight: 700; letter-spacing: .14em; color: var(--amber); margin-bottom: 6px; font-family: var(--mono); }
+  .r-hero .cap { font-size: 13px; font-weight: 700; letter-spacing: .14em; color: var(--amber); margin-bottom: 6px; font-family: var(--mono); }
   .r-hero .t-name { font-size: 34px; font-weight: 900; line-height: 1.25; letter-spacing: .02em; }
-  .r-hero .t-sub { font-size: 12.5px; color: var(--sub); margin-top: 8px; line-height: 1.7; }
+  .r-hero .t-sub { font-size: 13.5px; color: var(--sub); margin-top: 8px; line-height: 1.7; }
 
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: 16px;
     padding: 18px 20px; margin-bottom: 12px;
   }
-  .card-t { font-size: 11px; font-weight: 700; letter-spacing: .18em; color: var(--amber); margin-bottom: 8px; font-family: var(--mono); }
-  .card p { font-size: 13.5px; color: var(--sub); }
+  .card-t { font-size: 13px; font-weight: 700; letter-spacing: .18em; color: var(--amber); margin-bottom: 8px; font-family: var(--mono); }
+  .card p { font-size: 14px; color: var(--sub); }
   .card p b { color: var(--ink); }
 
   .exception {
     background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 16px;
-    padding: 16px 20px; font-size: 13px; color: var(--warn-ink); margin-bottom: 12px; line-height: 1.75;
+    padding: 16px 20px; font-size: 13.5px; color: var(--warn-ink); margin-bottom: 12px; line-height: 1.75;
   }
-  .exception b { display: block; font-size: 11.5px; letter-spacing: .12em; margin-bottom: 4px; }
+  .exception b { display: block; font-size: 13px; letter-spacing: .12em; margin-bottom: 4px; }
 
   .skip-list { list-style: none; }
   .skip-list li {
@@ -192,7 +200,7 @@
   .skip-list li::before {
     content: "✕"; position: absolute; left: 4px; color: var(--faint); font-weight: 900;
   }
-  .skip-note { font-size: 12px; color: var(--sub); margin-top: 8px; }
+  .skip-note { font-size: 13px; color: var(--sub); margin-top: 8px; }
 
   .steps-wrap { margin: 4px 0 0; }
   .step {
@@ -207,8 +215,8 @@
     display: flex; align-items: center; justify-content: center; margin-top: 2px;
   }
   .step .do { font-size: 14.5px; font-weight: 900; line-height: 1.6; color: var(--ink); }
-  .step .why { font-size: 12px; color: var(--sub); margin-top: 3px; }
-  .steps-foot { font-size: 12px; color: var(--sub); margin-top: 10px; }
+  .step .why { font-size: 13px; color: var(--sub); margin-top: 3px; }
+  .steps-foot { font-size: 13px; color: var(--sub); margin-top: 10px; }
   .steps-foot b { color: var(--ink); }
 
   .meter { display: flex; gap: 5px; margin: 10px 0 8px; }
@@ -216,7 +224,7 @@
   .meter i.on { background: var(--amber); box-shadow: 0 0 10px rgba(240,182,78,.55); }
   .junbi-read { font-size: 13px; color: var(--sub); }
   .junbi-num { font-size: 16px; font-weight: 700; color: var(--amber); font-family: var(--mono); }
-  .gaps-t { font-size: 11px; font-weight: 700; letter-spacing: .18em; color: var(--amber); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-family: var(--mono); }
+  .gaps-t { font-size: 13px; font-weight: 700; letter-spacing: .18em; color: var(--amber); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-family: var(--mono); }
   .gap-list { list-style: none; margin-top: 4px; }
   .gap-list li {
     font-size: 13.5px; font-weight: 700; color: var(--ink);
@@ -231,17 +239,24 @@
     text-align: center; font-size: 14.5px; font-weight: 900; color: #fff;
     margin: 26px 0 14px; line-height: 1.9;
   }
+  .cta-top { margin: 0 0 14px; }
+  .cta-top .btn-line { font-size: 15.5px; padding: 15px; }
+  .cta-top-d { font-size: 13px; color: var(--sub); text-align: center; margin-top: 8px; line-height: 1.7; }
+  .cta-top-d b { color: var(--ink); }
+  .cta-sub { font-size: 13px; color: var(--sub); margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); line-height: 1.8; text-align: left; }
+  .cta-sub b { color: var(--ink); }
+  .cta-sub a { color: var(--amber); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; padding: 6px 0; display: inline-block; }
   .cta {
     background: var(--card); border: 1.5px solid var(--green);
     border-radius: 18px; padding: 22px 20px; text-align: center;
     box-shadow: 0 0 30px rgba(6,199,85,.12);
   }
   .cta .cta-t { font-size: 15px; font-weight: 900; margin-bottom: 6px; color: #fff; }
-  .cta .cta-d { font-size: 12.5px; color: var(--sub); margin-bottom: 16px; }
+  .cta .cta-d { font-size: 13.5px; color: var(--sub); margin-bottom: 16px; }
   .cta .cta-d b { color: var(--ink); }
   .btn-copy {
     background: var(--card-hi); color: var(--ink); border: 1px solid var(--line);
-    font-size: 13.5px; padding: 13px; margin-bottom: 10px; font-weight: 700;
+    font-size: 14px; padding: 14px; min-height: 48px; margin-top: 12px; font-weight: 700;
   }
   .btn-copy:hover { border-color: var(--amber); }
   .btn-line {
@@ -249,11 +264,11 @@
     border-radius: 14px; text-decoration: none; display: block; font-weight: 900;
     box-shadow: 0 8px 24px rgba(6,199,85,.3);
   }
-  .copy-hint { font-size: 11px; color: var(--faint); margin-top: 10px; line-height: 1.7; }
+  .copy-hint { font-size: 13px; color: var(--faint); margin-top: 10px; line-height: 1.7; }
   .retry { text-align: center; margin-top: 8px; }
 
   footer {
-    padding: 20px 22px 32px; font-size: 10.5px; color: var(--faint); text-align: center; line-height: 1.9;
+    padding: 20px 22px 32px; font-size: 12.5px; color: var(--faint); text-align: center; line-height: 1.9;
     border-top: 1px solid var(--line);
   }
 
@@ -288,7 +303,7 @@
       <div class="types-note">4タイプのどれかに必ず当てはまります。タイプごとに「最初の3手」と「やらなくていいこと」が変わります。</div>
       <div class="trust">
         <div><b>30秒</b>タップだけ</div>
-        <div><b>送信なし</b>回答は端末内だけ</div>
+        <div><b>送信なし</b>端末内で完結</div>
         <div><b>登録不要</b>結果は即表示</div>
       </div>
       <button class="btn btn-primary" onclick="start()">診断をはじめる<span>　30秒 →</span></button>
@@ -304,6 +319,7 @@
       </div>
       <button class="btn btn-ans" onclick="answer(true)"><span class="mk">◯</span>はい</button>
       <button class="btn btn-ans" onclick="answer(false)"><span class="mk">─</span>いいえ</button>
+      <div class="q-hint">迷ったら<b>「いいえ」</b>でOK。正確さより速さです。</div>
       <button class="btn-back" onclick="back()">← 1つ戻る</button>
     </section>
 
@@ -316,6 +332,11 @@
         <div class="t-sub" id="r-sub"></div>
       </div>
       <div class="exception" id="r-exception" style="display:none"></div>
+
+      <div class="cta-top">
+        <a class="btn-line" id="line-top" href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">LINEでタイプ名を送る</a>
+        <div class="cta-top-d">「<b id="r-name3"></b>」が入力済みでLINEが開きます。送ると<b>あなたの「最初の3手」と今週の一手</b>が届きます。下を読んでからでも大丈夫です。</div>
+      </div>
 
       <div class="card">
         <div class="card-t">なぜ、ここからか</div>
@@ -347,11 +368,13 @@
       <div class="close-line">知識は、もう足りています。<br>決まっていなかったのは、順番だけ。</div>
 
       <div class="cta">
-        <div class="cta-t">タイプ名をLINEで返信してください</div>
+        <div class="cta-t">タイプ名をLINEで送ってください</div>
         <div class="cta-d">「<b id="r-name2"></b>」と送ると、すぐに<b>あなたのタイプの「最初の3手」と今週の一手</b>が届きます。詰まったら、その状況を返信すればかずとしが直接返します。</div>
-        <button class="btn btn-copy" onclick="copyType()" id="copybtn">タイプ名をコピーする</button>
-        <a class="btn-line" href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">LINEに戻って返信する</a>
-        <div class="copy-hint">まだ友だち追加していない方は、上のボタンから登録できます</div>
+        <a class="btn-line" id="line-bottom" href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">LINEでタイプ名を送る</a>
+        <div class="copy-hint">タイプ名が入力済みのトーク画面が開きます。送信ボタンを押すだけ</div>
+        <div class="cta-sub"><b>まだ友だち追加していない方は</b>、先に <a href="https://lin.ee/vrlzl4b" target="_blank" rel="noopener">かずとし公式LINEを追加</a> してから上のボタンを押してください。開かない場合はコピーして貼り付けてもOKです。
+          <button class="btn btn-copy" onclick="copyType()" id="copybtn">タイプ名をコピーする</button>
+        </div>
       </div>
 
       <div class="retry"><button class="btn-back" onclick="location.reload()">もう一度診断する</button></div>
@@ -369,43 +392,43 @@
 
 // 質問定義（正本：入金力の現在地診断 v02・2026-08-25本人確定の線引き）
 const QUESTIONS = [
-  { id:"e1", label:"はじめの確認 1 / 3",
+  { id:"e1", label:"はじめの確認",
     text:"支払いの延滞、高金利の借入、毎月の赤字。どれか当てはまりますか？",
     note:"リボ払い・カードローン・キャッシングの残りがある場合も「はい」です。" },
-  { id:"e2", label:"はじめの確認 2 / 3",
+  { id:"e2", label:"はじめの確認",
     text:"1年以内に大きな支出（車・出産・引っ越しなど）の予定が決まっていますか？",
     note:"" },
-  { id:"e3", label:"はじめの確認 3 / 3",
+  { id:"e3", label:"はじめの確認",
     text:"残業が月45時間を超えている、体調を崩しかけている、育児や介護で余力ゼロ。どれか当てはまりますか？",
     note:"" },
-  { id:"q1", label:"Q1 / 10",
+  { id:"q1", label:"現在地チェック",
     text:"貯金は、生活費の3か月分以上ありますか？",
     note:"すぐ引き出せる預金だけで数えます。投資は入れません。" },
-  { id:"q2", label:"Q2 / 10",
+  { id:"q2", label:"現在地チェック",
     text:"先週、同じ形式の資料づくり・定型メール・転記・議事録の清書を、自分の手でやりましたか？",
     note:"「またこれか」と思いながらやった作業のことです。" },
-  { id:"q3", label:"Q3 / 10",
+  { id:"q3", label:"現在地チェック",
     text:"固定費（住居・車・保険・通信・サブスク）は、手取りの半分を超えていますか？",
     note:"ざっくりで大丈夫です。" },
-  { id:"q4", label:"Q4 / 10",
+  { id:"q4", label:"現在地チェック",
     text:"毎月、決まった額を投資に回せていますか？",
     note:"", gap:"毎月の入金額が固定されていない" },
-  { id:"q5", label:"Q5 / 10",
+  { id:"q5", label:"現在地チェック",
     text:"新NISAの口座は開いていますか？",
     note:"", gap:"新NISAの口座がまだ無い" },
-  { id:"q6", label:"Q6 / 10",
+  { id:"q6", label:"現在地チェック",
     text:"平日に30分、家計や投資を見直す時間がありますか？",
     note:"", gap:"平日30分の見直し時間が取れていない" },
-  { id:"q7", label:"Q7 / 10",
+  { id:"q7", label:"現在地チェック",
     text:"毎月の生活費がいくらか、いますぐ即答できますか？",
     note:"", gap:"毎月の生活費を即答できない" },
-  { id:"q8", label:"Q8 / 10",
+  { id:"q8", label:"現在地チェック",
     text:"車・保険・通信のうち、この1年で見直したものがありますか？",
     note:"", gap:"固定費をこの1年、見直していない" },
-  { id:"q9", label:"Q9 / 10",
+  { id:"q9", label:"現在地チェック",
     text:"副業や学習に使える時間が、週2時間ありますか？",
     note:"", gap:"副業・学習に使える週2時間が無い" },
-  { id:"q10", label:"Q10 / 10",
+  { id:"q10", label:"現在地チェック",
     text:"1年後に貯金と投資をいくらにしたいか、数字で言えますか？",
     note:"", gap:"1年後の目標を数字で言えない" },
 ];
@@ -415,7 +438,7 @@ const TYPES = {
     name: "時間不足型",
     sub: "「またこれか」の作業に、考える時間を吸われている状態",
     why: "単刀直入に言うと、順番は<b>「時間 → 固定費 → 現金」</b>。前の一手が、次の一手の燃料になるからです。時間の余白がない人が固定費の見直しを始めても、繁忙期が来た瞬間に止まります。あなたの最初の敵は、知識不足ではなく時間です。",
-    skip: ["投資の勉強を増やすこと", "新しい節約術を試すこと", "副業を探すこと"],
+    skip: ["投資の勉強を増やすこと", "新しい節約術を試すこと", "新しい副業を始めること"],
     steps: [
       ["先週やった「同じ形式の作業」を3つ書き出す", "資料の整形・定型メール・転記・議事録。減らせる時間は、この中にある"],
       ["そのうち1つを、AIに渡すか、やめるか、人に頼む", "同じ形式の作業は、あなたがやる必要のない仕事です"],
@@ -427,7 +450,7 @@ const TYPES = {
     name: "固定費過多型",
     sub: "毎月の固定費が、入金力を先に食っている状態",
     why: "固定費の見直しは<b>1回やれば翌月からずっと効く</b>、いちばん割のいい一手です。ここを飛ばして副業から入ると、月2万稼ぐ苦労より、通信と保険の見直しで浮く額のほうが大きかった、ということが起きます。",
-    skip: ["副業を探すこと", "食費を我慢すること", "銘柄を研究すること"],
+    skip: ["新しい副業を始めること", "食費を我慢すること", "銘柄を研究すること"],
     steps: [
       ["固定費を「住居・車・保険・通信・サブスク」の5つに分けて月額を書く", "合計では、どれが重いか見えない"],
       ["1か月に1つだけ見直す。順番は 通信 → サブスク → 保険 → 車 → 住居", "手間が小さく効果が大きい順。一度に全部やると、どれも終わらない"],
@@ -475,6 +498,9 @@ const E1_OVERRIDE = {
   note: "<b>すでにある少額の積立を、無理に解約する必要はありません。</b>止めるのは「増やすこと」だけ。返済と赤字の解消が終わった日から、増やす段階に入ります。",
 };
 
+// 公式LINE①。oaMessage はタイプ名を入力済みでトーク画面を開く公式URLスキーム
+const LINE_OA_MESSAGE = "https://line.me/R/oaMessage/@455qtwur/?";
+
 let idx = 0;
 const answers = {};
 
@@ -485,9 +511,11 @@ function show(id){
   window.scrollTo(0, 0);
 }
 function setBar(){
-  $("bar").style.width = Math.round(idx / QUESTIONS.length * 100) + "%";
-  $("progress").setAttribute("aria-valuenow", idx);
-  $("pcount").innerHTML = idx > 0 && idx <= QUESTIONS.length ? `<b>${idx}</b> / ${QUESTIONS.length}` : "";
+  // 進捗は「いま何問目か」1本に統一（カード側の Q2/10 表記は廃止）
+  const cur = Math.min(idx + 1, QUESTIONS.length);
+  $("bar").style.width = Math.round(cur / QUESTIONS.length * 100) + "%";
+  $("progress").setAttribute("aria-valuenow", cur);
+  $("pcount").innerHTML = `<b>${cur}</b> / ${QUESTIONS.length}`;
 }
 function start(){ idx = 0; render(); show("s-q"); }
 function render(){
@@ -524,6 +552,8 @@ function finish(){
     key = "genkin";
     exception = "1年以内に大きな支出が決まっている人は、現金の確保が先です。使う予定のあるお金は、増やすお金に回しません。";
   } else if (a.e3 && key !== "jikan") {
+    // e3 は現金不足型（q1×）より優先して時間不足型にする（基本順「時間→固定費→現金」と同じ向き）。
+    // UT E-8 で「設計文書に規定なし」と判明。本人が「現金を先」と決めたら `key !== "genkin"` を条件に足す
     key = "jikan";
     exception = "残業月45時間超・体調・育児介護のどれかに当てはまる人は、文句なしで時間からです。";
   }
@@ -531,6 +561,11 @@ function finish(){
   const t = a.e1 ? Object.assign({}, TYPES.genkin, E1_OVERRIDE) : TYPES[key];
   $("r-name").textContent = t.name;
   $("r-name2").textContent = t.name;
+  $("r-name3").textContent = t.name;
+  // LINE①（@455qtwur）のトークをタイプ名入力済みで開く（コピー→戻る→貼る の3手を1タップに）
+  const oa = LINE_OA_MESSAGE + encodeURIComponent(t.name);
+  $("line-top").href = oa;
+  $("line-bottom").href = oa;
   $("r-sub").textContent = t.sub;
   $("r-why").innerHTML = t.why;
   if (exception) { $("r-exception").innerHTML = "<b>例外ルール適用</b>" + exception; $("r-exception").style.display = "block"; }
@@ -583,8 +618,8 @@ function fallbackCopy(text, done){
   try { ok = document.execCommand("copy"); } catch(e) {}
   document.body.removeChild(ta);
   if (ok) { done(); return; }
-  $("copybtn").textContent = "コピーできませんでした。上のタイプ名を長押しで選択してください";
-  setTimeout(()=>{ $("copybtn").textContent = "タイプ名をコピーする"; }, 3500);
+  $("copybtn").textContent = "コピーできませんでした。タイプ名を長押しで選択してください";
+  setTimeout(()=>{ $("copybtn").textContent = "タイプ名をコピーする"; }, 2500);
 }
 </script>
 </body>
