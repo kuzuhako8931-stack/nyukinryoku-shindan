@@ -86,6 +86,17 @@
     box-shadow:0 10px 28px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.35);transition:transform .08s ease;
   }
   .btn-copy:active{transform:scale(.98)}
+  .btn-open{
+    display:block;width:100%;text-align:center;text-decoration:none;border-radius:14px;font-family:inherit;
+    background:linear-gradient(160deg,#F4D07C 0%,var(--gold) 55%,#CFA03A 100%);
+    color:var(--ink);font-size:16.5px;padding:17px;font-weight:900;letter-spacing:.04em;
+    box-shadow:0 10px 28px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.35);transition:transform .08s ease;
+  }
+  .btn-open span{display:block;font-size:13px;font-weight:700;color:#5A4310;letter-spacing:.02em;margin-top:2px}
+  .btn-open.alt{background:var(--cream);border:1.5px solid var(--gold);box-shadow:0 8px 20px rgba(0,0,0,.2);padding:14px;margin-top:10px;font-size:15.5px}
+  .btn-open.alt span{color:var(--ink-3)}
+  .btn-open:active{transform:scale(.98)}
+  .btn-copy.sub{background:none;box-shadow:none;border:1.5px dashed var(--gold-soft);color:var(--ink-2);font-size:14px;padding:13px;margin-top:10px;font-weight:700;min-height:48px}
   .copy-note{font-size:13px;color:var(--ink-3);text-align:center;margin-top:10px;line-height:1.7}
 
   .how{position:relative;padding:24px 20px 16px;margin-bottom:14px}
@@ -125,15 +136,17 @@
       <div class="tab">伴走プロンプト</div>
       <div class="t" id="p-name"></div>
       <div class="d" id="p-desc"></div>
-      <button class="btn-copy" id="copybtn" onclick="copyPrompt()">プロンプトを全文コピー</button>
-      <div class="copy-note">コピーしたら、ChatGPTかClaude（無料版でOK）に貼って送信。<br>コピーできない場合は下の全文を長押しで選択してください。</div>
+      <a class="btn-open" id="open-gpt" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPTで開く<span>プロンプトは貼り付け済み。送信するだけ</span></a>
+      <a class="btn-open alt" id="open-claude" href="https://claude.ai/new" target="_blank" rel="noopener">Claudeで開く<span>ログインが必要。貼り付け済み</span></a>
+      <button class="btn-copy sub" id="copybtn" onclick="copyPrompt()">別のAIを使う：プロンプトをコピー</button>
+      <div class="copy-note">どちらも無料版でOK。ボタンで開いた画面に本文が入っていない場合は、コピーして貼ってください。<br>コピーできない場合は下の全文を長押しで選択してください。</div>
     </div>
 
     <div class="cream how">
       <div class="tab">使い方</div>
       <ol>
-        <li><span class="n">1</span><span>上のボタンで<b>プロンプトをコピー</b></span></li>
-        <li><span class="n">2</span><span><b>ChatGPTかClaude</b>に貼って送信</span></li>
+        <li><span class="n">1</span><span>上のボタンで<b>ChatGPTかClaudeを開く</b>（プロンプトは入力済み）</span></li>
+        <li><span class="n">2</span><span>そのまま<b>送信</b>する</span></li>
         <li><span class="n">3</span><span>AIの質問に<b>1つずつ答える</b>（約10分）</span></li>
         <li><span class="n">4</span><span>最後に出る<b>「今週の一手」をLINEに返信</b></span></li>
       </ol>
@@ -331,12 +344,16 @@ function select(k){
   $("p-name").textContent = PROMPTS[k].name + " 専用";
   $("p-desc").textContent = PROMPTS[k].desc;
   $("p-full").textContent = PROMPTS[k].text;
+  // ワンタップで開く（本文をURLに載せる。ChatGPTは ?q=、Claudeは /new?q=）
+  const enc = encodeURIComponent(PROMPTS[k].text);
+  $("open-gpt").href = "https://chatgpt.com/?q=" + enc;
+  $("open-claude").href = "https://claude.ai/new?q=" + enc;
   try { history.replaceState(null, "", "?t=" + k); } catch(e) {}
 }
 function copyPrompt(){
   const text = PROMPTS[current].text;
-  const done = () => { $("copybtn").textContent = "コピーしました ✓"; setTimeout(()=>{ $("copybtn").textContent = "プロンプトを全文コピー"; }, 2500); };
-  const fail = () => { $("copybtn").textContent = "下の全文を長押しで選択してください"; setTimeout(()=>{ $("copybtn").textContent = "プロンプトを全文コピー"; }, 3500); };
+  const done = () => { $("copybtn").textContent = "コピーしました ✓"; setTimeout(()=>{ $("copybtn").textContent = "別のAIを使う：プロンプトをコピー"; }, 2500); };
+  const fail = () => { $("copybtn").textContent = "下の全文を長押しで選択してください"; setTimeout(()=>{ $("copybtn").textContent = "別のAIを使う：プロンプトをコピー"; }, 3500); };
   try {
     navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done, fail));
   } catch(e) { fallbackCopy(text, done, fail); }

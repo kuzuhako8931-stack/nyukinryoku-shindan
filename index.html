@@ -154,6 +154,10 @@
   }
   .btn-primary span { color: #5A4310; font-size: 13.5px; margin-left: 8px; }
   .intro-foot { font-size: 13px; color: var(--on-g3); text-align: center; margin-top: 4px; }
+  .last { margin-top: 16px; text-align: center; }
+  .last .last-t { font-size: 13px; color: var(--on-g2); }
+  .last .last-t b { color: var(--on-g); }
+  .last .btn-share { margin-top: 6px; padding: 11px; min-height: 44px; font-size: 13.5px; }
 
   /* ---------- question ---------- */
   .qcard { position: relative; padding: 26px 20px 14px; margin-bottom: 20px; }
@@ -295,6 +299,10 @@
       <p class="lead">貯金が増えないのは、意志が弱いからではありません。NISAも節約も、もうやっている。足りないのは<b>「何から手を付けるか」という順番の知識</b>です。</p>
       <button class="btn btn-primary" onclick="start()">診断をはじめる<span>13回タップ・30秒 →</span></button>
       <div class="trust-line">送信なし・登録不要・端末内で完結</div>
+      <div class="last" id="last" hidden>
+        <div class="last-t">前回の結果：<b id="last-name"></b>（この端末に保存）</div>
+        <a class="btn-share" href="#" onclick="showLast();return false;">前回の結果をもう一度見る</a>
+      </div>
       <p class="kicker">「最初にやること」が、4タイプのどれか1つに絞られます。</p>
       <div class="types-row">
         <div class="type-chip">時間不足型</div>
@@ -598,7 +606,25 @@ function finish(){
     $("r-gaps").innerHTML = "";
   }
 
+  // 前回の結果を端末内に保存（どこにも送信しない）
+  try { localStorage.setItem("nyukin_last", JSON.stringify({ a: answers, name: t.name, ts: Date.now() })); } catch(e) {}
+
   show("s-result");
+}
+
+// 再訪時：前回の結果があれば冒頭に案内を出す
+let LAST = null;
+try { LAST = JSON.parse(localStorage.getItem("nyukin_last") || "null"); } catch(e) { LAST = null; }
+if (LAST && LAST.a && LAST.name) {
+  $("last-name").textContent = LAST.name;
+  $("last").hidden = false;
+}
+function showLast(){
+  if (!LAST || !LAST.a) return;
+  Object.keys(answers).forEach(k => delete answers[k]);
+  Object.assign(answers, LAST.a);
+  finish();
+  window.scrollTo(0, 0);
 }
 
 </script>
